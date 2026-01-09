@@ -1,18 +1,17 @@
 <script setup>
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import ProductItem from "@/components/ProductItem.vue";
-import { ref, computed, onMounted } from 'vue'
+import Pagination from "@/components/Pagination.vue";
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 
-const route = useRoute()
-const router = useRouter()
-const links = ref([]);
+const route = useRoute();
+const router = useRouter();
 const products = ref([]);
 const currentPage = ref(1);
 const itemPerPage = ref(8);
-const totalProducts = ref(10)
 
-links.value = [
+const linkNavigatePage = [
   { 'name': 'Accueil', 'nameUrl': 'home' },
   { 'name': 'Catalogue', 'nameUrl': 'catalog' }
 ];
@@ -25,9 +24,9 @@ products.value = [
     badge: 'promo',
     badgeClass: '',
     category: 'Foulards',
-    title: 'Hawaii Thuph',
-    newPrice: '25.00',
-    oldPrice: '35.00'
+    title: 'Hawaï Thuph',
+    newPrice: 25.00,
+    oldPrice: 35.00
   },
   {
     id: 2,
@@ -36,9 +35,9 @@ products.value = [
     badge: '-30%',
     badgeClass: 'light-pink',
     category: 'Foulards',
-    title: 'Tiffany Chou',
-    newPrice: '9.90',
-    oldPrice: '19.90'
+    title: 'Hawaï Thuph',
+    newPrice: 25.00,
+    oldPrice: 35.00
   },
   {
     id: 3,
@@ -48,8 +47,8 @@ products.value = [
     badgeClass: 'light-pink',
     category: 'Chaussure',
     title: 'Weston Mark Time',
-    newPrice: '450.00',
-    oldPrice: '599.90'
+    newPrice: 450.00,
+    oldPrice: 599.90
   },
   {
     id: 4,
@@ -59,8 +58,8 @@ products.value = [
     badgeClass: '',
     category: 'Pull',
     title: 'Tiffany Grey',
-    newPrice: '40.00',
-    oldPrice: '69.90'
+    newPrice: 40.00,
+    oldPrice: 69.90,
   },
   {
     id: 5,
@@ -70,8 +69,8 @@ products.value = [
     badgeClass: 'light-blue',
     category: 'Pull',
     title: 'Pull Pouma white',
-    newPrice: '89.90',
-    oldPrice: '99.99'
+    newPrice: 89.90,
+    oldPrice: 99.99
   },
   {
     id: 6,
@@ -81,8 +80,8 @@ products.value = [
     badgeClass: '',
     category: 'Sandale',
     title: 'Lacost drum',
-    newPrice: '50.90',
-    oldPrice: '99.90'
+    newPrice: 50.90,
+    oldPrice: 99.90
   },
   {
     id: 7,
@@ -92,8 +91,8 @@ products.value = [
     badgeClass: 'light-orange',
     category: 'Sac',
     title: 'Hermes Lagardène',
-    newPrice: '5000.00',
-    oldPrice: '8699.99'
+    newPrice: 5000.00,
+    oldPrice: 8699.99
   },
   {
     id: 8,
@@ -103,8 +102,8 @@ products.value = [
     badgeClass: 'light-orange',
     category: 'Chemise',
     title: 'Roi Luc',
-    newPrice: '39.00',
-    oldPrice: '69.99'
+    newPrice: 39.00,
+    oldPrice: 69.99
   },
   {
     id: 9,
@@ -114,8 +113,8 @@ products.value = [
     badgeClass: 'light-pink',
     category: 'Foulards',
     title: 'Tiffany Chou',
-    newPrice: '9.90',
-    oldPrice: '19.90'
+    newPrice: 9.90,
+    oldPrice: 19.90
   },
   {
     id: 10,
@@ -125,154 +124,162 @@ products.value = [
     badgeClass: '',
     category: 'Pull',
     title: 'Tiffany Grey',
-    newPrice: '40.00',
-    oldPrice: '69.90'
+    newPrice: 40.00,
+    oldPrice: 69.90
+  },
+  {
+    id: 11,
+    imgDefault: 'ceinture.png',
+    imgHover: 'ceinture-1.png',
+    badge: 'Collection',
+    badgeClass: 'light-blue',
+    category: 'Ceinture',
+    title: 'Armeni',
+    newPrice: 40.00,
+    oldPrice: 69.90
+  },
+  {
+    id: 12,
+    imgDefault: 'pull-4.png',
+    imgHover: 'pull-3.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Cromatic',
+    newPrice: 60.00,
+    oldPrice: 90.00
   }
-]
+];
 
-onMounted(() => {
-  if (route.query.page) {
-    currentPage.value = parseInt(route.query.page)
-  }
-});
+// Nombre total de produits
+const totalProducts = computed(() => products.value.length);
 
-const paginateProducts = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemPerPage.value
-  const endIndex = startIndex + itemPerPage.value
+// Produits de la page courante
+const paginationProducts = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemPerPage.value;
+  const endIndex = startIndex + itemPerPage.value;
   return products.value.slice(startIndex, endIndex);
 });
 
+// Nombre total de pages
 const totalPages = computed(() => {
-  return Math.ceil(totalProducts.value / itemPerPage.value)
+  return Math.ceil(totalProducts.value / itemPerPage.value);
 });
 
-const showingRange = computed(() => {
-  const start = (currentPage.value - 1) * itemPerPage.value + 1
-  const end = Math.min(currentPage.value * itemPerPage.value, totalProducts.value)
-  return { start, end }
-});
+// Gestion de changement de page
+const handlePageChange = (newPage) => {
+  // Vérifier que la nouvelle page est valide
+  if (newPage < 1 || newPage > totalPages.value) {
+    return;
+  }
 
-const pageNumbers = computed(() => {
-  const pages = []
-  const maxVisiblePages = 5
+  currentPage.value = newPage;
 
-  if (totalPages.value <= maxVisiblePages) {
-    for (let i = 1; i <= totalPages.value; i++) {
-      pages.push(i)
-    }
+  // Mettre à jour l'URL
+  router.push({
+    query: { ...route.query, page: newPage }
+  });
+
+  // Scroll vers la section produits
+  scrollToProducts();
+}
+
+// Fonction pour scroller vers les produits
+const scrollToProducts = () => {
+  const prodSection = document.getElementById('products');
+  if (prodSection) {
+    prodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// Montage du composant
+onMounted(() => {
+  // Initialiser la page depuis l'URL
+  const pageFromUrl = parseInt(route.query.page);
+
+  if (pageFromUrl && !isNaN(pageFromUrl) && pageFromUrl >= 1 && pageFromUrl <= totalPages.value) {
+    currentPage.value = pageFromUrl;
+  } else if (pageFromUrl && (pageFromUrl < 1 || pageFromUrl > totalPages.value)) {
+    // Si la page dans l'URL est invalide, rediriger vers la page 1
+    router.replace({ query: { ...route.query, page: 1 } });
+    currentPage.value = 1;
   } else {
-    if (currentPage.value <= 3) {
-      for (let i = 1; i <= 4; i++) {
-        pages.push(i)
-      }
-      pages.push('...')
-      pages.push(totalPages.value)
-    } else if (currentPage.value >= totalPages.value - 2) {
-      pages.push(1)
-      pages.push('...')
-      for (let i = totalPages.value - 3; i <= totalPages.value; i++) {
-        pages.push(i)
-      }
-    } else {
-      pages.push(1)
-      pages.push('...')
-      pages.push(currentPage.value - 1)
-      pages.push(currentPage.value)
-      pages.push(currentPage.value + 1)
-      pages.push('...')
-      pages.push(totalPages.value)
-    }
+    // Pas de page dans l'URL, définir par défaut à 1
+    currentPage.value = 1;
   }
-  return pages
-})
+});
 
-const goToPage = (page) => {
-  if (page >= 1 && page <= totalPages.value) {
-    currentPage.value = page
-    router.push({ query: { ...route.query, page: page } })
+// Surveiller les changements de route (navigation par boutons navigateur)
+watch(() => route.query.page, (newPage) => {
+  const pageNumber = parseInt(newPage);
 
-    const productSection = document.getElementById('products');
-    if (productSection) {
-      productSection.scrollIntoView({ behavior: 'smooth' })
-    }
+  if (newPage && !isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages.value) {
+    currentPage.value = pageNumber;
+    scrollToProducts();
+  } else if (!newPage) {
+    currentPage.value = 1;
   }
-}
-
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    goToPage(currentPage.value + 1)
-  }
-}
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    goToPage(currentPage.value - 1)
-  }
-}
+});
 </script>
 
 <template>
-  <Breadcrumb :links="links" />
+  <Breadcrumb :links="linkNavigatePage" />
   <section class="products section--lg container" id="products">
-    <p class="total__products">
-      Nous avons trouvé <span>{{ totalProducts }}</span> articles
-      <span class="showing-range" v-if="totalProducts > itemPerPage">
-        (Affichage {{ showingRange.start }} à {{ showingRange.end }})
-      </span>
-    </p>
-    <div class="products__container grid">
-      <ProductItem v-for="product in paginateProducts" :key="product.id" :product="product" />
+    <div class="products__header">
+      Nous avons trouvé <span class="products__count">{{ totalProducts }}</span> article{{ totalProducts > 1 ? 's' : '' }}
     </div>
 
-    <ul class="pagination" v-if="totalPages > 1">
-      <li @click="prevPage" :class="{ disabled: currentPage === 1 }">
-        <span class="pagination__link fa-solid fa-chevron-left"></span>
-      </li>
-      <li v-for="(page, index) in pageNumbers" :key="index"
-        @click="page !== '...' ? goToPage(page) : null"
-        :class="{ active: page === currentPage, ellipsis: page === '...' }">
-        <span class="pagination__link" v-if="page !== '...'">{{ String(page).padStart(2, '0') }}</span>
-        <span class="pagination__link" v-else>{{ page }}</span>
-      </li>
-      <li @click="nextPage" :class="{ disabled: currentPage === totalPages }">
-        <span class="pagination__link fa-solid fa-chevron-right"></span>
-      </li>
-    </ul>
+    <div class="products__container grid">
+      <ProductItem
+        v-for="product in paginationProducts"
+        :key="product.id"
+        :product="product"
+      />
+    </div>
+
+    <!-- Composant pagination -->
+    <Pagination
+      :current-page="currentPage"
+      :total-pages="totalPages"
+      @update:current-page="handlePageChange"
+    />
   </section>
 </template>
 
 <style scoped>
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  list-style: none;
+.products {
+  padding: 2rem 0;
 }
 
-.pagination li {
-  cursor: pointer;
-  padding: 0.5rem;
+.products__header {
+  margin-bottom: 2rem;
+  font-size: 1.125rem;
+  color: #374151;
 }
 
-.pagination li.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.products__count {
+  font-weight: 700;
+  color: #333;
 }
 
-.pagination__link {
-  display: inline-block;
-  padding: 0.5rem 0.75rem;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+.products__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
-.pagination li.active .pagination__link {
-  background-color: #333;
-  color: white;
+@media (max-width: 768px) {
+  .products__container {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
 }
 
-.pagination li.ellipsis .pagination__link {
-  cursor: default;
+@media (max-width: 480px) {
+  .products__container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
 }
 </style>

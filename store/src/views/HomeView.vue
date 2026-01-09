@@ -423,7 +423,7 @@ export default {
           newPrice:99.90,
           oldPrice:160.00,
           countdownText:"Dépêchez-vous, l'offre se termine bientôt :",
-          endDate:"2026-01-07T23:59:59Z"
+          endDate:"2026-01-12T23:59:59Z"
         },
         {
           id:2,
@@ -433,7 +433,7 @@ export default {
           newPrice:99.90,
           oldPrice:160.00,
           countdownText:"Dépêchez-vous, l'offre se termine bientôt :",
-          endDate:"2026-01-06T23:59:59Z"
+          endDate:"2026-01-10T23:59:59Z"
         },
       ],
       timer:null

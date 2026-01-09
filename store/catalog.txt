@@ -227,3 +227,581 @@
     </ul>
   </section>
 </template>
+
+
+
+
+
+
+
+
+
+
+
+const route = useRoute()
+const router = useRouter()
+const links = ref([]);
+const products = ref([]);
+const currentPage = ref(1);
+const itemPerPage = ref(8);
+const totalProducts = ref(10)
+
+links.value = [
+  { 'name': 'Accueil', 'nameUrl': 'home' },
+  { 'name': 'Catalogue', 'nameUrl': 'catalog' }
+];
+
+products.value = [
+  {
+    id: 1,
+    imgDefault: 'product-1-1.jpg',
+    imgHover: 'product-1-2.jpg',
+    badge: 'promo',
+    badgeClass: '',
+    category: 'Foulards',
+    title: 'Hawaii Thuph',
+    newPrice: '25.00',
+    oldPrice: '35.00'
+  },
+  {
+    id: 2,
+    imgDefault: 'scarf.png',
+    imgHover: 'scarf-1.png',
+    badge: '-30%',
+    badgeClass: 'light-pink',
+    category: 'Foulards',
+    title: 'Tiffany Chou',
+    newPrice: '9.90',
+    oldPrice: '19.90'
+  },
+  {
+    id: 3,
+    imgDefault: 'shoe-5.png',
+    imgHover: 'shoe-7.png',
+    badge: '-22%',
+    badgeClass: 'light-pink',
+    category: 'Chaussure',
+    title: 'Weston Mark Time',
+    newPrice: '450.00',
+    oldPrice: '599.90'
+  },
+  {
+    id: 4,
+    imgDefault: 'polo.png',
+    imgHover: 'polo-2.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Tiffany Grey',
+    newPrice: '40.00',
+    oldPrice: '69.90'
+  },
+  {
+    id: 5,
+    imgDefault: 'pull-1.png',
+    imgHover: 'pull-2.png',
+    badge: 'collection',
+    badgeClass: 'light-blue',
+    category: 'Pull',
+    title: 'Pull Pouma white',
+    newPrice: '89.90',
+    oldPrice: '99.99'
+  },
+  {
+    id: 6,
+    imgDefault: 'sandals.png',
+    imgHover: 'sandals-1.png',
+    badge: 'Nouveauté',
+    badgeClass: '',
+    category: 'Sandale',
+    title: 'Lacost drum',
+    newPrice: '50.90',
+    oldPrice: '99.90'
+  },
+  {
+    id: 7,
+    imgDefault: 'bag.png',
+    imgHover: 'bag-3.png',
+    badge: 'collection',
+    badgeClass: 'light-orange',
+    category: 'Sac',
+    title: 'Hermes Lagardène',
+    newPrice: '5000.00',
+    oldPrice: '8699.99'
+  },
+  {
+    id: 8,
+    imgDefault: 'shirt.png',
+    imgHover: 'shirt-1.png',
+    badge: 'collection',
+    badgeClass: 'light-orange',
+    category: 'Chemise',
+    title: 'Roi Luc',
+    newPrice: '39.00',
+    oldPrice: '69.99'
+  },
+  {
+    id: 9,
+    imgDefault: 'scarf.png',
+    imgHover: 'scarf-1.png',
+    badge: '-30%',
+    badgeClass: 'light-pink',
+    category: 'Foulards',
+    title: 'Tiffany Chou',
+    newPrice: '9.90',
+    oldPrice: '19.90'
+  },
+  {
+    id: 10,
+    imgDefault: 'polo.png',
+    imgHover: 'polo-2.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Tiffany Grey',
+    newPrice: '40.00',
+    oldPrice: '69.90'
+  }
+]
+
+onMounted(() => {
+  if (route.query.page) {
+    currentPage.value = parseInt(route.query.page)
+  }
+});
+
+const paginateProducts = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemPerPage.value
+  const endIndex = startIndex + itemPerPage.value
+  return products.value.slice(startIndex, endIndex);
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(totalProducts.value / itemPerPage.value)
+});
+
+const showingRange = computed(() => {
+  const start = (currentPage.value - 1) * itemPerPage.value + 1
+  const end = Math.min(currentPage.value * itemPerPage.value, totalProducts.value)
+  return { start, end }
+});
+
+const pageNumbers = computed(() => {
+  const pages = []
+  const maxVisiblePages = 5
+
+  if (totalPages.value <= maxVisiblePages) {
+    for (let i = 1; i <= totalPages.value; i++) {
+      pages.push(i)
+    }
+  } else {
+    if (currentPage.value <= 3) {
+      for (let i = 1; i <= 4; i++) {
+        pages.push(i)
+      }
+      pages.push('...')
+      pages.push(totalPages.value)
+    } else if (currentPage.value >= totalPages.value - 2) {
+      pages.push(1)
+      pages.push('...')
+      for (let i = totalPages.value - 3; i <= totalPages.value; i++) {
+        pages.push(i)
+      }
+    } else {
+      pages.push(1)
+      pages.push('...')
+      pages.push(currentPage.value - 1)
+      pages.push(currentPage.value)
+      pages.push(currentPage.value + 1)
+      pages.push('...')
+      pages.push(totalPages.value)
+    }
+  }
+  return pages
+})
+
+const goToPage = (page) => {
+  if (page >= 1 && page <= totalPages.value) {
+    currentPage.value = page
+    router.push({ query: { ...route.query, page: page } })
+
+    const productSection = document.getElementById('products');
+    if (productSection) {
+      productSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    goToPage(currentPage.value + 1)
+  }
+}
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    goToPage(currentPage.value - 1)
+  }
+}
+
+<p class="total__products">
+      Nous avons trouvé <span>{{ totalProducts }}</span> articles
+      <span class="showing-range" v-if="totalProducts > itemPerPage">
+        (Affichage {{ showingRange.start }} à {{ showingRange.end }})
+      </span>
+    </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script setup>
+  import { computed } from 'vue';
+
+  const props = defineProps({
+    currentPage : {
+      type:Number,
+      required:true,
+    },
+    totalPages : {
+      type:Number,
+      required:true
+    }
+  });
+  const emit = defineEmits(['update:currentPage']);
+  // Afficher le nombre de page
+  const pageNumbers = computed(()=>{
+    const pages = [];
+    const total = props.totalPages;
+    const current = props.currentPage;
+
+    if (total <= 8){
+      for(let i=1; i<= total; i++) {
+        pages.push(i);
+      }
+      return pages
+    }
+
+    if(current <= 3) {
+      for(let i=2; i<=4;i++){
+        pages.push(i);
+      }
+      
+    }
+    return pages;
+  });
+
+  const changePage = (page)=>{
+    if(page >= 1 && page <= props.totalPages) {
+        emit('update:currentPage',page)
+    }
+
+  }
+</script>
+
+<template>
+  <ul class="pagination">
+    <li class="pagination__link first" v-if="totalPages > 1">
+      <i @click="changePage(currentPage - 1)" class="fa-solid fa-chevron-left"></i>
+    </li>
+    <li v-for="pageItem in pageNumbers" :key="pageItem" :class="{'active':pageItem=== currentPage}" class="pagination__link">
+      <span v-on:click="changePage(pageItem)">{{ pageItem }}</span>
+    </li>
+    <li class="pagination__link" v-if="currentPage === totalPages">
+      <i @click="changePage(currentPage + 1)" class="fa-solid fa-chevron-right"></i>
+    </li>
+  </ul>
+</template>
+<style scoped>
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination__link {
+  cursor: pointer;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination__link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination__link.active {
+  background-color: #333;
+  color: white;
+}
+
+.pagination__link span,
+.pagination__link i {
+  cursor: pointer;
+}
+</style>
+
+
+
+
+
+
+
+
+<script setup>
+import Breadcrumb from "@/components/Breadcrumb.vue";
+import ProductItem from "@/components/ProductItem.vue";
+import Pagination from "@/components/Pagination.vue";
+import { ref, computed, onMounted } from 'vue'
+import {useRoute, useRouter} from "vue-router";
+
+
+const route = useRoute();
+const router = useRouter();
+const products = ref([]);
+const currentPage = ref(1);
+const itemPerPage = ref(6);
+
+const linkNavigatePage = [
+  {'name':'Accueil','nameUrl':'home'},
+  {'name':'Catalogue','nameUrl':'catalog'}
+];
+products.value = [
+  {
+    id: 1,
+    imgDefault: 'product-1-1.jpg',
+    imgHover: 'product-1-2.jpg',
+    badge: 'promo',
+    badgeClass:'',
+    category: 'Foulards',
+    title: 'Hawaï Thuph',
+    newPrice: 25.00,
+    oldPrice: 35.00
+  },
+  {
+    id: 2,
+    imgDefault: 'scarf.png',
+    imgHover: 'scarf-1.png',
+    badge: '-30%',
+    badgeClass:'light-pink',
+    category: 'Foulards',
+    title: 'Hawaï Thuph',
+    newPrice: 25.00,
+    oldPrice: 35.00
+  },
+  {
+    id: 3,
+    imgDefault: 'shoe-5.png',
+    imgHover: 'shoe-7.png',
+    badge: '-22%',
+    badgeClass: 'light-pink',
+    category: 'Chaussure',
+    title: 'Weston Mark Time',
+    newPrice: 450.00,
+    oldPrice: 599.90
+  },
+  {
+    id: 4,
+    imgDefault: 'polo.png',
+    imgHover: 'polo-2.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Tiffany Grey',
+    newPrice: 40.00,
+    oldPrice: 69.90,
+  },
+  {
+    id: 5,
+    imgDefault: 'pull-1.png',
+    imgHover: 'pull-2.png',
+    badge: 'collection',
+    badgeClass: 'light-blue',
+    category: 'Pull',
+    title: 'Pull Pouma white',
+    newPrice: 89.90,
+    oldPrice: 99.99
+  },
+  {
+    id: 6,
+    imgDefault: 'sandals.png',
+    imgHover: 'sandals-1.png',
+    badge: 'Nouveauté',
+    badgeClass: '',
+    category: 'Sandale',
+    title: 'Lacost drum',
+    newPrice: 50.90,
+    oldPrice: 99.90
+  },
+  {
+    id: 7,
+    imgDefault: 'bag.png',
+    imgHover: 'bag-3.png',
+    badge: 'collection',
+    badgeClass: 'light-orange',
+    category: 'Sac',
+    title: 'Hermes Lagardène',
+    newPrice: 5000.00,
+    oldPrice: 8699.99
+  },
+  {
+    id: 8,
+    imgDefault: 'shirt.png',
+    imgHover: 'shirt-1.png',
+    badge: 'collection',
+    badgeClass: 'light-orange',
+    category: 'Chemise',
+    title: 'Roi Luc',
+    newPrice: 39.00,
+    oldPrice: 69.99
+  },
+  {
+    id: 9,
+    imgDefault: 'scarf.png',
+    imgHover: 'scarf-1.png',
+    badge: '-30%',
+    badgeClass: 'light-pink',
+    category: 'Foulards',
+    title: 'Tiffany Chou',
+    newPrice: 9.90,
+    oldPrice: 19.90
+  },
+  {
+    id: 10,
+    imgDefault: 'polo.png',
+    imgHover: 'polo-2.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Tiffany Grey',
+    newPrice: 40.00,
+    oldPrice: 69.90
+  },
+  {
+    id: 11,
+    imgDefault: 'ceinture.png',
+    imgHover: 'ceinture-1.png',
+    badge: 'Collection',
+    badgeClass: 'light-blue',
+    category: 'Ceinture',
+    title: 'Armeni',
+    newPrice: 40.00,
+    oldPrice: 69.90
+  },
+  {
+    id: 12,
+    imgDefault: 'pull-4.png',
+    imgHover: 'pull-3.png',
+    badge: '',
+    badgeClass: '',
+    category: 'Pull',
+    title: 'Cromatic',
+    newPrice: 60.00,
+    oldPrice: 90.00
+  }
+];
+const totalProducts = computed(()=>{
+  return products.value.length;
+})
+// montage de composant
+onMounted(()=>{
+  if (route.query.page) {
+    currentPage.value = parseInt(route.query.page)
+  }
+});
+// produits de la page courante
+const paginationProducts = computed(()=>{
+  const startIndex = (currentPage.value - 1) * itemPerPage.value
+  const endIndex = startIndex + itemPerPage.value;
+  return products.value.slice(startIndex,endIndex);
+});
+
+// Nombre total de pages
+const totalPages = computed(()=>{
+  return Math.ceil(totalProducts.value / itemPerPage.value);
+});
+// gestion de changement de page
+const handlePageChange = (newPage)=>{
+  currentPage.value = newPage;
+  router.push({query:{...route.query, page:newPage}});
+
+  const prodSection = document.getElementById('products');
+  if(prodSection) {
+    prodSection.scrollIntoView({behavior: 'smooth'});
+  }
+}
+</script>
+
+<template>
+  <Breadcrumb :links="linkNavigatePage" />
+  <section class="products section--lg container" id="products">
+    Nous avons trouvés <span>{{ totalProducts }}</span> articles
+    <div class="products__container grid">
+      <ProductItem v-for="product in paginationProducts" :key="product.id" :product="product" />
+    </div>
+
+    <!-- Composant pagination -->
+     <Pagination
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        @update:current-page="handlePageChange"
+     />
+  </section>
+</template>
+
+<style scoped>
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  list-style: none;
+}
+
+.pagination li {
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.pagination li.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination__link {
+  display: inline-block;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.pagination li.active .pagination__link {
+  background-color: #333;
+  color: white;
+}
+
+.pagination li.ellipsis .pagination__link {
+  cursor: default;
+}
+</style>
