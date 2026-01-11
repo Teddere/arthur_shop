@@ -103,7 +103,7 @@
         {{ page }}
       </span>
     </li>
-    <li class="pagination__item" v-if="currentPage > totalPages" @click="nextPage">
+    <li class="pagination__item" v-if=" currentPage < totalPages" @click="nextPage">
       <span class="pagination__link pagination__arrow">
         <i class="fa-solid fa-chevron-right"></i>
       </span>

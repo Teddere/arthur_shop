@@ -139,7 +139,7 @@ table {
   row-gap: 1rem;
 }
 .form__group {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 .textarea {

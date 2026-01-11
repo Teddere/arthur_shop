@@ -28,7 +28,3 @@
     </ul>
   </section>
 </template>
-
-<style scoped>
-
-</style>

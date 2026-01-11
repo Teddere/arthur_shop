@@ -225,9 +225,9 @@ watch(() => route.query.page, (newPage) => {
 <template>
   <Breadcrumb :links="linkNavigatePage" />
   <section class="products section--lg container" id="products">
-    <div class="products__header">
+    <!--<div class="products__header">
       Nous avons trouvé <span class="products__count">{{ totalProducts }}</span> article{{ totalProducts > 1 ? 's' : '' }}
-    </div>
+    </div>-->
 
     <div class="products__container grid">
       <ProductItem
