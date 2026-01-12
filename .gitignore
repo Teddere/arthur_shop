@@ -1,2 +1,5 @@
 .idea/
 db.sqlite3
+categories
+products
+__pycache__
