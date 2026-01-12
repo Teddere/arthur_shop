@@ -9,7 +9,7 @@ class Category(models.Model):
     slug = models.SlugField(unique=True,blank=True,null=True)
     thumbnail = models.ImageField(upload_to='categories/',null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    update = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ['name']
@@ -29,7 +29,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=150)
+    title = models.CharField(max_length=150)
     ref = models.CharField(max_length=10,blank=True,null=True)
     slug = models.SlugField(unique=True,blank=True,max_length=50)
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
@@ -42,10 +42,31 @@ class Product(models.Model):
     imgDefault = models.ImageField(upload_to='products/',blank=True,null=True)
     imgHover = models.ImageField(upload_to='products/',blank=True,null=True)
     description = models.TextField(blank=True,null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created']
+    def __str__(self):
+        return f"{self.title}"
+    
+    def get_absolute_url(self):
+        return f"/{self.category.slug}/{self.slug}/"
+    
+    def get_image_default(self):
+        if (self.imgDefault) :
+            return f"http://127.0.0.1:8000{self.imgDefault.url}"
+        return ''
+        
+    def get_image_hover(self):
+        if self.imgHover:
+            return f"http://127.0.0.1:8000{self.imgHover.url}"
+        return ''
+    
 
     def save(self,*args,**kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
             self.ref = generate_ref()
         if self.percent:
             self.newPrice = discount_val(self.oldPrice,self.percent)
@@ -53,12 +74,21 @@ class Product(models.Model):
         return super().save(*args,**kwargs)
 
 class Size(models.Model):
-    SIZE_CHOICES = ['XS','S','M','L','XL','XXL']
-    code = models.TextChoices(value=SIZE_CHOICES)
+    
+    class SizeChoices(models.TextChoices):
+        xxs = 'xxs','XXS'
+        xs = 'xs','XS'
+        s = 's','S'
+        m = 'm','M'
+        l = 'l','L'
+        xl = 'xl','XL'
+        xxl = 'xxl','XXL'
+        
+    code = models.CharField(max_length=10,choices=SizeChoices,unique=True)
     product = models.ManyToManyField(Product)
 
     class Meta:
-        db_name = 'sizes'
+        db_table = 'sizes'
         verbose_name = 'Taille'
         verbose_name_plural = 'Tailles'
         ordering = ['code']
@@ -67,13 +97,13 @@ class Size(models.Model):
         return f"{self.code}"
 
 class Color(models.Model):
-    value = models.CharField(max_length=15,blank=True,null=True)
-    product = models.ManyToManyField(Product,blank=True,null=True)
+    value = models.CharField(max_length=15,blank=True)
+    product = models.ManyToManyField(Product,blank=True)
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=20,unique=True)
-    product = models.ManyToManyField(Product,blank=True,null=True)
+    product = models.ManyToManyField(Product,blank=True)
 
     class Meta:
         db_table = 'tags'
