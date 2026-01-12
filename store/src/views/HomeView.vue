@@ -9,6 +9,7 @@ import { Navigation } from 'swiper/modules'
 import CategoryItem from '@/components/CategoryItem.vue'
 import ProductItem from '@/components/ProductItem.vue'
 import ShowaseItem from '@/components/ShowaseItem.vue'
+import axios from 'axios'
 export default {
   data: () => {
     return {
@@ -452,11 +453,14 @@ export default {
     }
   },
   mounted() {
+
     this.date = Date.now()
 
     this.timer = setInterval(()=>{
       this.date = Date.now()
     },1000);
+
+
   },
   beforeMount() {
     if(this.timer){
@@ -464,6 +468,17 @@ export default {
     }
   },
   methods:{
+
+    getCategoryAll(){
+      axios
+        .get('/api/v1/categories/')
+        .then(response => {
+          console.log(response.data)
+        })
+        .catch(err => {
+          console.log(err)
+        });
+    },
     getTimeRemaining(endDate){
       const total = new Date(endDate).getTime() - this.date;
       if (total <=0 ){
@@ -640,13 +655,21 @@ export default {
           prevEl: '.button-prev-view',
         }"
         :breakpoints="{
-          640: {
+          350: {
+            slidesPerView: 1,
+            spaceBetween: 24
+          },
+          576: {
             slidesPerView: 2,
             spaceBetween: 20,
           },
           768: {
-            slidesPerView: 4,
-            spaceBetween: 25,
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          992: {
+            slidesPerView: 3,
+            spaceBetween: 20
           },
           1400: {
             slidesPerView: 5,
