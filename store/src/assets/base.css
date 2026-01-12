@@ -16,6 +16,7 @@
   --contrainer-color: hsl(0, 0%, 93%);
   --border-color: hsl(207, 36%, 85%);
   --border-color-alt: hsl(201, 15%, 90%);
+  --border-color-dark: hsl(0,0%,20%);
   --light-color: #eef1f2;
   /*========= Font and typography =====*/
   --body-font: 'lato', sans-serif;
@@ -125,6 +126,10 @@ table {
   height: 45px;
   border-radius: 0.25rem;
   font-size: var(--small-font-size);
+}
+.form__input:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 .new__price {
   color: var(--primary-color);

@@ -1,8 +1,62 @@
 <script setup>
-  import {ref} from 'vue'
+  import {ref} from 'vue';
   import ProductItem from "@/components/ProductItem.vue";
   const productItem = ref([]);
   const product = ref({});
+  const activeTab = ref('info');
+  const reviews = ref([
+    {
+      author:'Marie Antoinette',
+      rating: 4,
+      text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
+      date:'18 Novembre 2024 à 15h30',
+      image:'coat_pub.png'
+    },
+    {
+      author:'Emmanuelle Lecompte',
+      rating: 5,
+      text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
+      date:'18 Novembre 2024 à 15h30',
+      image:'banner-pub-2.png'
+    },
+    {
+      author:'Luc Tiffany',
+      rating: 5,
+      text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
+      date:'18 Novembre 2024 à 15h30',
+      image:'manteau-2.jpg'
+    },
+  ]);
+  const productInfo = [
+    { title: 'Composition', content: 'Polyster 85%, Visco 10%, Elasthanne' },
+    { title: 'Matière', content: 'Coton, Laine, Cuir, Polyester, Lin, etc.' },
+    { title: 'Collection', content: 'Collection Hiver 2024, Collection Capsule' },
+    { title: 'Stock', content: 'Géré par taille/couleur si applicable' },
+    { title: 'Taille', content: 'XS, S, M, L, XL' },
+    { title: 'Couleurs', content: 'Noir,Blanc,Vert' }
+  ]
+
+  product.value = {
+    'ref':'FWM15VKT',
+    'name':'Pull Rousseur brun',
+    'defaultImg':'sweater.png',
+    'imgItem': ['sweater-1.png','sweater.png','pul.png'],
+    'brand': 'Adidas',
+    'newPrice': 75.00,
+    'oldPrice': 90.00,
+    'percent': 22,
+    'warranty': 1,
+    'return': 15,
+    'colors':['hsl(37,100%,65%)','hsl(353,100%,67%)','hsl(49,100%,60%)','hsl(304,100%,78%)','hsl(126,61%,52%)'],
+    'sizes':['S','M','L','XL','XXL'],
+    'stock': 10,
+    'tags':['Linne','Mixte','Pull'],
+    'description':"Lorem ipsum dolor sit amet, consectetur adipisicing elit.Tenetur ad nihil iste provident sapiente corporis distinctio dolores natus voluptate nulla! Cumque quas saepe provident, laborum ducimuslaudantium accusamus beatae quis."
+  }
+
+  const selectImage = ref(product.value.imgItem.find((item)=> item === product.value.defaultImg))
+  const selectColor = ref(product.value.colors[0]);
+  const selectSize = ref(product.value.sizes[0]);
   productItem.value = [
     {
       id: 3,
@@ -47,101 +101,109 @@
       title: 'Cromatic',
       newPrice: 60.00,
       oldPrice: 90.00
-    }
-  ];
-
-  product.value = {
-    'ref':'FWM15VKT',
-    'name':'Pull Rousseur brun',
-    'defaultImg':'sweater.png',
-    'imgItem': ['sweater-1.png','sweater.png','pul.png'],
-    'brand': 'Adidas',
-    'newPrice': 75.00,
-    'oldPrice': 90.00,
-    'pourcent': 22,
-    'warranty': 1,
-    'return': 15,
-    'colors':['hsl(37,100%,65%)','hsl(353,100%,67%)','hsl(49,100%,60%)','hsl(304,100%,78%)','hsl(126,61%,52%)'],
-    'sizes':['S','M','L','XL','XXL'],
-    'stock': 10,
-    'etiquette':['Linne','Mixte','Pull'],
-    'composition':{
-      'Polyster': 85,
-      'Visco': 10,
-      'Elasthanne': 10
     },
-    'matiere': {}
+  ]
 
+  const getImageUrl = (url)=>{
+    return new URL(`../assets/images/${url}`,import.meta.url).href
   }
+  // Review
+  const noteReview = ref(0);
+  const hoverReview = ref(0)
 </script>
 <template>
   <!-- =========== DETAILS ============= -->
   <section class="details section--lg">
     <div class="details__container container grid">
       <div class="details___group">
-        <img src="@/assets/images/sweater.png" alt="product image" class="details__img">
+        <img :src="getImageUrl(selectImage)" alt="product image" class="details__img" >
         <div class="detail__small-images grid">
-          <img src="@/assets/images/sweater-1.png" alt="product image" class="details__small-img">
-          <img src="@/assets/images/sweater.png" alt="product image" class="details__small-img">
-          <img src="@/assets/images/pul.png" alt="product image" class="details__small-img">
+          <img
+            v-for="(image,index) in product.imgItem"
+            :key="index"
+            :src="getImageUrl(image)"
+            @click="selectImage = image"
+            :class="{'active': selectImage === image}"
+            alt="description product image"
+            class="details__small-img"
+          >
         </div>
       </div>
       <div class="details___group">
-        <h3 class="details__title">Pull Rousseur brun</h3>
-        <p class="details__brand">Marque: <span>Adidas</span></p>
+        <h3 class="details__title">{{product.name}}</h3>
+        <p class="details__brand">Marque: <span>{{product.brand}}</span></p>
         <div class="details__price flex">
-          <span class="new__price">75.00 €</span>
-          <span class="old__price">90.00 €</span>
-          <span class="save__price">22% de réduction</span>
+          <span class="new__price">{{product.newPrice}} €</span>
+          <span class="old__price">{{product.oldPrice}} €</span>
+          <span class="save__price">{{product.percent}}% de réduction</span>
         </div>
-        <p class="short__description">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-          Tenetur ad nihil iste provident sapiente corporis distinctio dolores
-          natus voluptate nulla! Cumque quas saepe provident, laborum ducimus
-          laudantium accusamus beatae quis.
-        </p>
+        <p class="short__description">{{product.description}}</p>
         <ul class="product__list">
           <li class="list__item flex">
-            <i class="fa-solid fa-crown"></i> 1 ans de garantie de fabrication.
+            <i class="fa-solid fa-crown"></i>
+            <template v-if="product.warranty === 1"> 1 an de garantie de fabrication</template>
+            <template v-else>{{product.warranty}} ans de garantie de fabrication</template>
           </li>
           <li class="list__item flex">
-            <i class="fa-solid fa-refresh"></i> 15 jour pour un retour.
+            <i class="fa-solid fa-refresh"></i>
+            <template v-if="product.return < 15 ">Pas de retour possible</template>
+            <template v-else>{{product.return}} jours pour un retour.</template>
           </li>
           <li class="list__item flex">
-            <i class="fa-solid fa-credit-card"></i> Paiment en plusieurs fois disponible
+            <i class="fa-solid fa-credit-card"></i>
+            Paiement en plusieurs fois disponible
           </li>
         </ul>
         <div class="details__color flex">
           <span class="details__color-title">Couleur</span>
-          <ul class="color__list">
-            <li><a href="#" class="color__link" style="background: hsl(37,100%,65%);" ></a></li>
-            <li><a href="#" class="color__link" style="background: hsl(353,100%,67%);" ></a></li>
-            <li><a href="#" class="color__link" style="background: hsl(49,100%,60%);"></a></li>
-            <li><a href="#" class="color__link" style="background: hsl(304,100%,78%);"></a></li>
-            <li><a href="#" class="color__link" style="background: hsl(126,61%,52%);"></a></li>
+          <ul class="color__list" v-if="product.colors">
+            <li v-for="(color,index) in product.colors" :key="index" >
+              <button type="button"
+                :style="{backgroundColor:color}"
+                :class="{'active': selectColor === color}"
+                @click="selectColor = color"
+                class="color__link"
+              ></button>
+            </li>
           </ul>
+          <span v-else class="option">Pas d'option de couleur</span>
+
         </div>
         <div class="details__size flex">
           <span class="details__size-title">Taille</span>
           <ul class="size__list">
-            <li><a href="#" class="size__link size-active" >S</a></li>
-            <li><a href="#" class="size__link"  >M</a></li>
-            <li><a href="#" class="size__link" >L</a></li>
-            <li><a href="#" class="size__link" >XL</a></li>
-            <li><a href="#" class="size__link" >XXL</a></li>
+            <li v-for="(size,index) in product.sizes" :key="index">
+              <button type="button"
+                      @click="selectSize = size"
+                      :class="{'size-active': selectSize === size}"
+                      class="size__link"
+              >
+                {{size}}
+              </button>
+              </li>
           </ul>
         </div>
-        <div class="details__action">
-          <input type="number" value="3" name="article_number" id="article_number" class="quantity">
-          <a href="#" class="btn btn-sm">Mettre au panier</a>
-          <a href="#" class="details__action-btn">
-            <i class="fa-solid fa-heart"></i>
-          </a>
-        </div>
+        <form >
+          <div class="details__action">
+            <input type="number" value="3" name="article_number" id="article_number" class="quantity">
+            <button type="submit" class="btn btn-sm">Mettre au panier</button>
+            <button type="button" class="details__action-btn">
+              <i class="fa-solid fa-heart"></i>
+            </button>
+          </div>
+        </form>
         <ul class="details__meta">
-          <li class="meta__list flex">Ref:<span> FWM15VKT</span></li>
-          <li class="meta__list flex">Etiquette:<span>Linne,Mixte,Pull</span></li>
-          <li class="meta__list flex">Disponibilité:<span>8 articles en stock</span></li>
+          <li class="meta__list flex">Ref:<span> {{product.ref}}</span></li>
+          <li class="meta__list flex">
+            Etiquette:
+            <template v-for="(tag,index) in product.tags" :key="index">
+              <span v-if="index < product.tags.length - 1">{{tag}},</span>
+              <span v-else>{{tag}}</span>
+            </template>
+          </li>
+          <li class="meta__list flex">
+            Disponibilité:<span>{{product.stock}} article(s) en stock</span>
+          </li>
         </ul>
       </div>
     </div>
@@ -149,110 +211,91 @@
   <!-- ========= DETAILS TAB =========================-->
   <section class="details_tab container">
     <div class="details__tabs">
-      <span class="detail__tab">
-        Description detaillée
+      <span
+        @click="activeTab='info'"
+        :class="{'active-tab':activeTab === 'info'}"
+        class="detail__tab"
+      >
+        Description détaillée
       </span>
-      <span class="detail__tab active-tab">Avis(3)</span>
+      <span
+        @click="activeTab = 'reviews'"
+        :class="{ 'active-tab': activeTab === 'reviews' }"
+        class="detail__tab"
+      >
+       Avis({{reviews.length}})
+      </span>
     </div>
     <div class="details__tabs-content">
-      <div class="details__tab-content">
+      <transition name="fade" mode="out-in">
+        <div v-if="activeTab === 'info'" class="details__tab-content">
         <table class="info__table">
-          <tr>
-            <th>Composition</th>
-            <td>Polyster 85%, Visco 10%, Elasthanne</td>
-          </tr>
-          <tr>
-            <th>Matière</th>
-            <td>Coton, Laine, Cuir, Polyester, Lin, etc.</td>
-          </tr>
-          <tr>
-            <th>Collection</th>
-            <td>Collection Hiver 2024, Collection Capsule</td>
-          </tr>
-          <tr>
-            <th>Stock</th>
-            <td>Géré par taille/couleur si applicable</td>
-          </tr>
-          <tr>
-            <th>Taille</th>
-            <td>XS, S, M, L, XL</td>
-          </tr>
-          <tr>
-            <th>Couleurs</th>
-            <td>Noir,Blanc,Vert</td>
+          <tr v-for="(item,index) in productInfo" :key="index">
+            <th>{{item.title}}</th>
+            <td>{{item.content}}</td>
           </tr>
         </table>
       </div>
-      <div class="details__tab-content active-tab">
-        <div class="reviews__container grid">
-          <div class="review__single">
-            <div class="">
-              <img src="@/assets/images/coat_pub.png" alt="personal review image" class="review__img">
-              <h4 class="review__title">Marie Antoinette</h4>
-            </div>
-            <div class="review__data">
-              <div class="review__rating">
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-              </div>
-              <p class="review__description">
-                Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.
-              </p>
-              <span class="review__data">18 Novembre 2024 à 15h30</span>
-            </div>
-          </div>
-          <div class="review__single">
-            <div class="">
-              <img src="@/assets/images/coat_pub.png" alt="personal review image" class="review__img">
-              <h4 class="review__title">Marie Antoinette</h4>
-            </div>
-            <div class="review__data">
-              <div class="review__rating">
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-                <i class="fa-regular fa-star"></i>
-              </div>
-              <p class="review__description">
-                Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.
-              </p>
-              <span class="review__data">18 Novembre 2024 à 15h30</span>
-            </div>
+      </transition>
+      <transition name="fade" mode="out-in">
+        <div v-if="activeTab === 'reviews'" class="details__tab-content">
+          <div class="reviews__container grid">
+            <transition-group name="review" tag="div">
+              <article v-for="(review, index) in reviews" :key="`review-${index}`" class="review__single">
+                <div>
+                  <img :src="getImageUrl(review.image)" :alt="review.author" class="review__img">
+                  <h4 class="review__title">{{ review.author }}</h4>
+                </div>
+                <div class="review__data">
+                  <div class="review__rating">
+                    <i v-for="n in review.rating" :key="n" class="fa-regular fa-star"></i>
+                  </div>
+                  <p class="review__description">{{review.text}}</p>
+                  <span class="review__data">{{review.date}}</span>
+                </div>
+              </article>
+            </transition-group>
           </div>
           <div class="review__form">
             <h4 class="review__form-title">Donner un avis</h4>
             <div class="rate__product">
-              <i class="fa-regular fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-              <i class="fa-regular fa-star"></i>
+              <button type="button"
+                      v-for="n in 5"
+                      :key="n"
+                      @click="noteReview = n"
+                      @mouseenter="hoverReview = n"
+                      @mouseleave="hoverReview = 0"
+                      :class="{'active':(hoverReview || noteReview) >= n}"
+                      class="star_review"
+              >
+                <i class="fa-solid fa-star"></i>
+              </button>
             </div>
-            <form action="" class="form grid">
-              <textarea name="review" id="review" class="form__input textarea" placeholder="Entrez votre commentaire"></textarea>
-              <div class="form__group grid">
-                <input type="text" name="name" id="name" class="form__input" placeholder="Entrez votre nom">
-                <input type="email" name="email" id="email" class="form__input" placeholder="Entrez votre email">
-              </div>
-              <div class="form__btn">
-                <button type="submit" class="btn">Sumettre le commentaire</button>
-              </div>
+            <form  class="form grid">
+              <textarea  class="form__input textarea" placeholder="Entrez votre commentaire"></textarea>
             </form>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-  <!-- ========== PRODUCTS ========================== -->
-  <section class="products container section--lg">
-    <h3 class="section__title">Articles <span>Similaires</span></h3>
-    <div class="products__container grid">
-      <ProductItem v-for="prod in productItem" :key="prod.id" :product="prod" />
+      </transition>
     </div>
   </section>
 </template>
-
+<style scoped>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-enter-from, .fade-leave-to {
+    opacity: 0;
+  }
+  .review-enter-active, .review-leave-active {
+    transition: all 0.3s ease;
+  }
+  .review-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .review-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+</style>
