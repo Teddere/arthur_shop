@@ -1,26 +1,29 @@
 <script setup>
   import {ref} from 'vue';
   import ProductItem from "@/components/ProductItem.vue";
-  const productItem = ref([]);
+  import Breadcrumb from '@/components/Breadcrumb.vue';
+
+  const links = ref([]);
+  const productList = ref([]);
   const product = ref({});
   const activeTab = ref('info');
   const reviews = ref([
     {
       author:'Marie Antoinette',
-      rating: 4,
+      rating: 5,
       text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
       date:'18 Novembre 2024 à 15h30',
       image:'coat_pub.png'
     },
     {
-      author:'Emmanuelle Lecompte',
+      author:'Marie Antoinette',
       rating: 5,
       text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
       date:'18 Novembre 2024 à 15h30',
       image:'banner-pub-2.png'
     },
     {
-      author:'Luc Tiffany',
+      author:'Marie Antoinette',
       rating: 5,
       text:'Merci pour la livraison très rapide depuis la Pologne, en seulement 3 jours.',
       date:'18 Novembre 2024 à 15h30',
@@ -57,7 +60,7 @@
   const selectImage = ref(product.value.imgItem.find((item)=> item === product.value.defaultImg))
   const selectColor = ref(product.value.colors[0]);
   const selectSize = ref(product.value.sizes[0]);
-  productItem.value = [
+  productList.value = [
     {
       id: 3,
       imgDefault: 'shoe-5.png',
@@ -109,9 +112,15 @@
   }
   // Review
   const noteReview = ref(0);
-  const hoverReview = ref(0)
+  const hoverReview = ref(0);
+  links.value = [
+    { 'name': 'Accueil', 'nameUrl': 'home' },
+    { 'name': 'Catalogue', 'nameUrl': 'catalog' },
+    { 'name': product.value.name, 'nameUrl': 'catalog' },
+  ]
 </script>
 <template>
+  <Breadcrumb :links="links" />
   <!-- =========== DETAILS ============= -->
   <section class="details section--lg">
     <div class="details__container container grid">
@@ -273,12 +282,30 @@
             </div>
             <form  class="form grid">
               <textarea  class="form__input textarea" placeholder="Entrez votre commentaire"></textarea>
+              <div class="form__group grid">
+                <input type="text" placeholder="Entrez votre nom" class="form__input">
+                <input type="email" placeholder="Entrez votre email" class="form__input">
+              </div>
+              <div class="form__btn">
+                <button type="submit" class="btn">Soumettre</button>
+              </div>
             </form>
           </div>
         </div>
       </transition>
     </div>
   </section>
+  <!-- ========= PRODUCTS ==================-->
+   <section class="products container section--lg">
+    <h3 class="section__title">Articles <span>Similiaires</span></h3>
+    <div class="products__container grid">
+      <productItem
+        v-for="prod in productList"
+        :key="prod.id"
+        :product="prod"
+      ></productItem>
+    </div>
+   </section>
 </template>
 <style scoped>
   .fade-enter-active, .fade-leave-active {

@@ -979,7 +979,7 @@
   display: none;
 }*/
 .details__tabs-content {
-  min-height: 300px;
+  margin-bottom: 2rem;
 }
 .info__table tr th,
 .info__table tr td {
@@ -1052,6 +1052,23 @@
 .star_review.active {
   color: hsl(42,100%,50%);
 }
+/*-- ============= LOGIN & REGISTER ============== --*/
+.login-register__container {
+  grid-template-columns: 100%;
+  align-items: flex-start;
+}
+.login,
+.register {
+  border: 1px solid var(--border-color-alt);
+  padding: 1.25rem;
+  border-radius: .5rem;
+}
+.login-register__container .section__title {
+  text-align: center;
+}
+.login-register__container .btn {
+  width: 100%;
+}
 /* For small devices  */
 @media screen and (min-width: 350px){
   /*============ CATEGORIES =======================*/
@@ -1088,6 +1105,16 @@
   }
   .review__single {
     column-gap: 1.5rem;
+  }
+  /*-- ============= LOGIN & REGISTER ============== --*/
+  .login-register {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .login-register__container {
+    grid-template-columns: max(500px);
+
   }
 }
 /* For medium devices */
@@ -1170,6 +1197,11 @@
   /* =============== DETAILS ======================= */
   .details__container {
     grid-template-columns: 5.5fr 6.5fr;
+  }
+  /*-- ============= LOGIN & REGISTER ============== --*/
+  .login,
+  .register {
+    padding: 2rem;
   }
 }
 /* For large devices */
