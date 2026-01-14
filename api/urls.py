@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import LastProductsList
+from api import views
 
 urlpatterns = [
-    path('last-products',LastProductsList.as_view())
+    path('last-products/',views.LastProductsList.as_view()),
+    path('products/<slug:category_slug>/<slug:product_slug>/',views.ProductDetail.as_view())
 ]

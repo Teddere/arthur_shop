@@ -28,8 +28,6 @@ class Category(models.Model):
         super().save(*args,**kwargs)
 
 
-
-
 class Size(models.Model):
     
     class SizeChoices(models.TextChoices):
@@ -66,6 +64,9 @@ class Color(models.Model):
     name = models.CharField(max_length=20,blank=True,null=True)
     value = models.CharField(max_length=15,blank=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=20,unique=True)
@@ -78,21 +79,40 @@ class Tag(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+class Badge(models.Model):
+    class BadgeChoices(models.TextChoices):
+        badge = 'Promo'
+        badge_0 = 'Collection'
+        badge_1 = 'Nouveau'
+        badge_2 = 'Edition'
+    class classChoices(models.TextChoices):
+        pink = 'light-pink'
+        blue = 'light-blue'
+        green = 'light-green'
+        orange = 'light-orange'
+    name = models.CharField(max_length=20,choices=BadgeChoices, blank=True,null=True)
+    className = models.CharField(max_length=20,choices=classChoices,blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.name}"
+
 class Product(models.Model):
     title = models.CharField(max_length=150)
     ref = models.CharField(max_length=10,blank=True,null=True)
     slug = models.SlugField(unique=True,blank=True,max_length=50)
+
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     size = models.ManyToManyField(Size)
     tag = models.ManyToManyField(Tag)
     color = models.ManyToManyField(Color)
+    badge = models.ForeignKey(Badge,on_delete=models.Empty,blank=True,null=True)
     brand = models.CharField(max_length=100,blank=True,null=True)
     percent = models.IntegerField(blank=True,null=True)
-
     newPrice = models.DecimalField(blank=True,null=True,decimal_places=2, max_digits=10)
     oldPrice = models.DecimalField(max_digits=10,decimal_places=2)
     stock = models.IntegerField(default=0)
     warranty = models.IntegerField(blank=True,null=True)
+
     imgDefault = models.ImageField(upload_to='products/',blank=True,null=True)
     imgHover = models.ImageField(upload_to='products/',blank=True,null=True)
 
@@ -122,6 +142,7 @@ class Product(models.Model):
     def save(self,*args,**kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        if not self.ref:
             self.ref = generate_ref()
         if self.percent:
             self.newPrice = discount_val(self.oldPrice,self.percent)

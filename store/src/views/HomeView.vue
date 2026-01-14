@@ -1,4 +1,5 @@
 <script>
+import axios from 'axios'
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 // Import Swiper styles
@@ -9,7 +10,7 @@ import { Navigation } from 'swiper/modules'
 import CategoryItem from '@/components/CategoryItem.vue'
 import ProductItem from '@/components/ProductItem.vue'
 import ShowaseItem from '@/components/ShowaseItem.vue'
-import axios from 'axios'
+
 export default {
   data: () => {
     return {
@@ -28,195 +29,18 @@ export default {
         {
           id:'new',
           label:'Nouveauté',
-          products:[
-            {
-              id:1,
-              imgDefault:'bag.png',
-              imgHover:'bag-3.png',
-              badge:'collection',
-              badgeClass:'light-orange',
-              category:'Sac',
-              title:'Hermes Lagardène',
-              newPrice:'5000.00',
-              oldPrice:'8699.99'
-            },
-            {
-              id:2,
-              imgDefault:'sandals.png',
-              imgHover:'sandals-1.png',
-              badge:'Nouveauté',
-              badgeClass:'',
-              category:'Sandale',
-              title:'Lacost drum',
-              newPrice:'50.90',
-              oldPrice:'99.90'
-            },
-            {
-              id:3,
-              imgDefault:'pull-1.png',
-              imgHover:'pull-2.png',
-              badge:'collection',
-              badgeClass:'light-blue',
-              category:'Pull',
-              title:'Pull Pouma white',
-              newPrice:'89.90',
-              oldPrice:'99.99'
-            },
-            {
-              id:4,
-              imgDefault:'snearkes-1.png',
-              imgHover:'snearkes.png',
-              badge:'Nouveauté',
-              badgeClass:'light-blue',
-              category:'Sac',
-              title:'Converse all time',
-              newPrice:'39.00',
-              oldPrice:'59.90'
-            },
-            {
-              id:5,
-              imgDefault:'polo.png',
-              imgHover:'polo-2.png',
-              badge:'',
-              badgeClass:'',
-              category:'Pull',
-              title:'Tiffany Grey',
-              newPrice:'40.00',
-              oldPrice:'69.90'
-            },
-            {
-              id:6,
-              imgDefault:'shoe-5.png',
-              imgHover:'shoe-7.png',
-              badge:'-22%',
-              badgeClass:'light-pink',
-              category:'Chaussure',
-              title:'Weston Mark Time',
-              newPrice:'450.00',
-              oldPrice:'599.90'
-            },
-            {
-              id:7,
-              imgDefault:'scarf.png',
-              imgHover:'scarf-1.png',
-              badge:'-30%',
-              badgeClass:'light-pink',
-              category:'Foulards',
-              title:'Tiffany Chou',
-              newPrice:'9.90',
-              oldPrice:'19.90'
-            },
-            {
-              id:8,
-              imgDefault:'product-1-1.jpg',
-              imgHover:'product-1-2.jpg',
-              badge:'promo',
-              badgeClass:'',
-              category:'Foulards',
-              title:'Hawaii Thuph',
-              newPrice:'25.00',
-              oldPrice:'35.00'
-            }
-          ]
+          products:[]
         },
         {
           id:'sale',
           label:'Promotion',
-          products:[
-            {
-            id:1,
-            imgDefault:'product-1-1.jpg',
-            imgHover:'product-1-2.jpg',
-            badge:'promo',
-            badgeClass:'',
-            category:'Foulards',
-            title:'Hawaii Thuph',
-            newPrice:'25.00',
-            oldPrice:'35.00'
-          },
-            {
-            id:2,
-            imgDefault:'scarf.png',
-            imgHover:'scarf-1.png',
-            badge:'-30%',
-            badgeClass:'light-pink',
-            category:'Foulards',
-            title:'Tiffany Chou',
-            newPrice:'9.90',
-            oldPrice:'19.90'
-          },
-            {
-            id:3,
-            imgDefault:'shoe-5.png',
-            imgHover:'shoe-7.png',
-            badge:'-22%',
-            badgeClass:'light-pink',
-            category:'Chaussure',
-            title:'Weston Mark Time',
-            newPrice:'450.00',
-            oldPrice:'599.90'
-          },
-            {
-            id:4,
-            imgDefault:'polo.png',
-            imgHover:'polo-2.png',
-            badge:'',
-            badgeClass:'',
-            category:'Pull',
-            title:'Tiffany Grey',
-            newPrice:'40.00',
-            oldPrice:'69.90'
-          },
-            {
-            id:5,
-            imgDefault:'pull-1.png',
-            imgHover:'pull-2.png',
-            badge:'collection',
-            badgeClass:'light-blue',
-            category:'Pull',
-            title:'Pull Pouma white',
-            newPrice:'89.90',
-            oldPrice:'99.99'
-          },
-            {
-            id:6,
-            imgDefault:'sandals.png',
-            imgHover:'sandals-1.png',
-            badge:'Nouveauté',
-            badgeClass:'',
-            category:'Sandale',
-            title:'Lacost drum',
-            newPrice:'50.90',
-            oldPrice:'99.90'
-          },
-            {
-            id:7,
-            imgDefault:'bag.png',
-            imgHover:'bag-3.png',
-            badge:'collection',
-            badgeClass:'light-orange',
-            category:'Sac',
-            title:'Hermes Lagardène',
-            newPrice:'5000.00',
-            oldPrice:'8699.99'
-          },
-            {
-            id:8,
-            imgDefault:'shirt.png',
-            imgHover:'shirt-1.png',
-            badge:'collection',
-            badgeClass:'light-orange',
-            category:'Chemise',
-            title:'Roi Luc',
-            newPrice:'39.00',
-            oldPrice:'69.99'
-          },
-          ]
+          products:[]
         },
         {
           id:'moment',
           label:'Article du moment',
           products: [
+            /*
             {
               id:1,
               imgDefault:'snearkes-1.png',
@@ -304,7 +128,7 @@ export default {
               title:'Tiffany Chou',
               newPrice:'9.90',
               oldPrice:'19.90'
-            },
+            },*/
           ]
         }
       ],
@@ -454,13 +278,12 @@ export default {
   },
   mounted() {
 
-    this.date = Date.now()
+    this.getProductAll()
 
+    this.date = Date.now()
     this.timer = setInterval(()=>{
       this.date = Date.now()
     },1000);
-
-
   },
   beforeMount() {
     if(this.timer){
@@ -469,11 +292,14 @@ export default {
   },
   methods:{
 
-    getCategoryAll(){
+    getProductAll(){
       axios
-        .get('/api/v1/categories/')
+        .get('/api/v1/last-products/')
         .then(response => {
           console.log(response.data)
+            this.tabs.forEach((item)=>{
+              item.products = response.data;
+            });
         })
         .catch(err => {
           console.log(err)
@@ -585,7 +411,7 @@ export default {
             <transition-group name="scale" tag="div" class="products__container grid">
               <ProductItem
                 v-for="(product,index) in getCurrentTabProducts"
-                v-bind:key="product.id"
+                :key="index"
                 :style="{'--index':index}"
                 :product="product"
               ></ProductItem>

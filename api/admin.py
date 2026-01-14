@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-from .models import Category,Product,Color,Tag,Size
+from .models import Category,Product,Color,Tag,Size,Badge
 
 admin.site.register(Category)
 admin.site.register(Size)
 admin.site.register(Tag)
+admin.site.register(Badge)
 
 class SizeInline(admin.TabularInline):
     model = Product.size.through
@@ -26,18 +27,19 @@ class TagInline(admin.TabularInline):
     min_num = 0
     max_num = 3
 
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     inlines = [ColorInline,SizeInline,TagInline]
 
-    list_display = ['title', 'ref', 'category', 'oldPrice', 'newPrice', 'stock', 'created']
+    list_display = ['title', 'ref', 'category', 'oldPrice', 'newPrice', 'stock', 'created','badge']
     list_filter = ['category', 'created']
     search_fields = ['title', 'ref', 'brand']
     prepopulated_fields = {'slug': ('title',)}
 
     fieldsets = (
         ('Informations', {
-            'fields': ('title','brand','category','slug','ref')
+            'fields': ('title','brand','category','badge','slug','ref')
         }),
         ('Prix et promotion', {
             'fields': ('oldPrice','percent','newPrice')
@@ -56,7 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):
-    list_dispaly = ['value','color_preview','get_products_count']
+    list_dispaly = ['value','color_preview']
     search_fields = ['value']
 
     def color_preview(self,obj):

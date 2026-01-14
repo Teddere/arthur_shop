@@ -1,5 +1,7 @@
 <script setup>
-  import {ref} from 'vue';
+  import {ref,onMounted} from 'vue';
+  import axios  from "axios";
+  import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
 
@@ -118,6 +120,15 @@
     { 'name': 'Catalogue', 'nameUrl': 'catalog' },
     { 'name': product.value.name, 'nameUrl': 'catalog' },
   ]
+
+  // product
+  const getProduct = ()=>{
+
+
+  }
+  onMounted(()=>{
+    getProduct()
+  })
 </script>
 <template>
   <Breadcrumb :links="links" />

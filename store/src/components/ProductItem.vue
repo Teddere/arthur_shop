@@ -1,4 +1,6 @@
 <script>
+  import {RouterLink} from "vue-router";
+
   export  default {
     name:'ProductItem',
     props:{
@@ -7,10 +9,8 @@
         required:true
       }
     },
-    methods:{
-      getImageUrl(imageName){
-        return new URL(`../assets/images/${imageName}`,import.meta.url).href
-      }
+    components: {
+      RouterLink
     }
   }
 </script>
@@ -18,8 +18,8 @@
   <article class="product__item">
     <div class="product__banner">
       <a href="#" class="product__images">
-        <img :src="getImageUrl(product.imgDefault)" alt="product image" class="product__img default">
-        <img :src="getImageUrl(product.imgHover)" alt="product image" class="product__img hover">
+        <img :src="product.get_image_default" alt="product image" class="product__img default">
+        <img :src="product.get_image_hover" alt="product image" class="product__img hover">
       </a>
       <div class="product__actions">
         <a href="#" class="action__btn" aria-label="Aperçu">
@@ -32,13 +32,13 @@
           <i class='fa-solid fa-shuffle'></i>
         </a>
       </div>
-      <div v-if="product.badge" class="product__badge" :class="product.badgeClass">{{product.badge}}</div>
+      <div v-if="product.badge" class="product__badge" :class="product.badge.className">{{product.badge.name}}</div>
     </div>
     <div class="product_content">
-      <span class="product__category">{{product.category}}</span>
-      <a href="#">
+      <span class="product__category">{{product.category.name}}</span>
+      <RouterLink :to="product.get_absolute_url">
         <h3 class="product__title">{{product.title}}</h3>
-      </a>
+      </RouterLink>
       <div class="product__rating">
         <i class="fa-regular fa-star"></i>
         <i class="fa-regular fa-star"></i>
