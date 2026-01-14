@@ -7,7 +7,7 @@ from .utils import discount_val,generate_ref
 class Category(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True,blank=True,null=True)
-    thumbnail = models.ImageField(upload_to='categories/',null=True,blank=True)
+    thumbnail = models.ImageField(upload_to='images/',null=True,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -81,10 +81,11 @@ class Tag(models.Model):
 
 class Badge(models.Model):
     class BadgeChoices(models.TextChoices):
-        badge = 'Promo'
+        badge = 'Promotion'
         badge_0 = 'Collection'
         badge_1 = 'Nouveau'
         badge_2 = 'Edition'
+        badge_3 = 'tendance'
     class classChoices(models.TextChoices):
         pink = 'light-pink'
         blue = 'light-blue'
@@ -102,10 +103,10 @@ class Product(models.Model):
     slug = models.SlugField(unique=True,blank=True,max_length=50)
 
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    size = models.ManyToManyField(Size)
-    tag = models.ManyToManyField(Tag)
+    size = models.ManyToManyField(Size,null=True,blank=True)
+    tag = models.ManyToManyField(Tag,null=True,blank=True)
     color = models.ManyToManyField(Color)
-    badge = models.ForeignKey(Badge,on_delete=models.Empty,blank=True,null=True)
+    badge = models.ForeignKey(Badge,on_delete=models.SET_NULL,blank=True,null=True)
     brand = models.CharField(max_length=100,blank=True,null=True)
     percent = models.IntegerField(blank=True,null=True)
     newPrice = models.DecimalField(blank=True,null=True,decimal_places=2, max_digits=10)
@@ -113,8 +114,8 @@ class Product(models.Model):
     stock = models.IntegerField(default=0)
     warranty = models.IntegerField(blank=True,null=True)
 
-    imgDefault = models.ImageField(upload_to='products/',blank=True,null=True)
-    imgHover = models.ImageField(upload_to='products/',blank=True,null=True)
+    imgDefault = models.ImageField(upload_to='images/',blank=True,null=True)
+    imgHover = models.ImageField(upload_to='images/',blank=True,null=True)
 
     description = models.TextField(blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)

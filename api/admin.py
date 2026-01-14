@@ -12,7 +12,7 @@ class SizeInline(admin.TabularInline):
     model = Product.size.through
     extra = 1
     min_num = 1
-    max_num = 4
+    max_num = 5
 
 class ColorInline(admin.TabularInline):
     model = Product.color.through
@@ -25,7 +25,7 @@ class TagInline(admin.TabularInline):
     model = Product.tag.through
     extra = 1
     min_num = 0
-    max_num = 3
+    max_num = 5
 
 
 @admin.register(Product)
