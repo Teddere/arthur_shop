@@ -5,151 +5,19 @@ import Pagination from "@/components/Pagination.vue";
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 
+import axios from "axios";
+
 const route = useRoute();
 const router = useRouter();
 const products = ref([]);
 const currentPage = ref(1);
-const itemPerPage = ref(8);
+const itemPerPage = ref(12);
 
 const linkNavigatePage = [
   { 'name': 'Accueil', 'nameUrl': 'home' },
   { 'name': 'Catalogue', 'nameUrl': 'catalog' }
 ];
 
-products.value = [
-  {
-    id: 1,
-    imgDefault: 'product-1-1.jpg',
-    imgHover: 'product-1-2.jpg',
-    badge: 'promo',
-    badgeClass: '',
-    category: 'Foulards',
-    title: 'Hawaï Thuph',
-    newPrice: 25.00,
-    oldPrice: 35.00
-  },
-  {
-    id: 2,
-    imgDefault: 'scarf.png',
-    imgHover: 'scarf-1.png',
-    badge: '-30%',
-    badgeClass: 'light-pink',
-    category: 'Foulards',
-    title: 'Hawaï Thuph',
-    newPrice: 25.00,
-    oldPrice: 35.00
-  },
-  {
-    id: 3,
-    imgDefault: 'shoe-5.png',
-    imgHover: 'shoe-7.png',
-    badge: '-22%',
-    badgeClass: 'light-pink',
-    category: 'Chaussure',
-    title: 'Weston Mark Time',
-    newPrice: 450.00,
-    oldPrice: 599.90
-  },
-  {
-    id: 4,
-    imgDefault: 'polo.png',
-    imgHover: 'polo-2.png',
-    badge: '',
-    badgeClass: '',
-    category: 'Pull',
-    title: 'Tiffany Grey',
-    newPrice: 40.00,
-    oldPrice: 69.90,
-  },
-  {
-    id: 5,
-    imgDefault: 'pull-1.png',
-    imgHover: 'pull-2.png',
-    badge: 'collection',
-    badgeClass: 'light-blue',
-    category: 'Pull',
-    title: 'Pull Pouma white',
-    newPrice: 89.90,
-    oldPrice: 99.99
-  },
-  {
-    id: 6,
-    imgDefault: 'sandals.png',
-    imgHover: 'sandals-1.png',
-    badge: 'Nouveauté',
-    badgeClass: '',
-    category: 'Sandale',
-    title: 'Lacost drum',
-    newPrice: 50.90,
-    oldPrice: 99.90
-  },
-  {
-    id: 7,
-    imgDefault: 'bag.png',
-    imgHover: 'bag-3.png',
-    badge: 'collection',
-    badgeClass: 'light-orange',
-    category: 'Sac',
-    title: 'Hermes Lagardène',
-    newPrice: 5000.00,
-    oldPrice: 8699.99
-  },
-  {
-    id: 8,
-    imgDefault: 'shirt.png',
-    imgHover: 'shirt-1.png',
-    badge: 'collection',
-    badgeClass: 'light-orange',
-    category: 'Chemise',
-    title: 'Roi Luc',
-    newPrice: 39.00,
-    oldPrice: 69.99
-  },
-  {
-    id: 9,
-    imgDefault: 'scarf.png',
-    imgHover: 'scarf-1.png',
-    badge: '-30%',
-    badgeClass: 'light-pink',
-    category: 'Foulards',
-    title: 'Tiffany Chou',
-    newPrice: 9.90,
-    oldPrice: 19.90
-  },
-  {
-    id: 10,
-    imgDefault: 'polo.png',
-    imgHover: 'polo-2.png',
-    badge: '',
-    badgeClass: '',
-    category: 'Pull',
-    title: 'Tiffany Grey',
-    newPrice: 40.00,
-    oldPrice: 69.90
-  },
-  {
-    id: 11,
-    imgDefault: 'ceinture.png',
-    imgHover: 'ceinture-1.png',
-    badge: 'Collection',
-    badgeClass: 'light-blue',
-    category: 'Ceinture',
-    title: 'Armeni',
-    newPrice: 40.00,
-    oldPrice: 69.90
-  },
-  {
-    id: 12,
-    imgDefault: 'pull-4.png',
-    imgHover: 'pull-3.png',
-    badge: '',
-    badgeClass: '',
-    category: 'Pull',
-    title: 'Cromatic',
-    newPrice: 60.00,
-    oldPrice: 90.00
-  }
-];
 
 // Nombre total de produits
 const totalProducts = computed(() => products.value.length);
@@ -192,8 +60,19 @@ const scrollToProducts = () => {
   }
 }
 
+const getProductAll = ()=>{
+  axios
+    .get('/api/v1/products/all/')
+    .then(response=>{
+      products.value = response.data
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+}
 // Montage du composant
 onMounted(() => {
+  getProductAll()
   // Initialiser la page depuis l'URL
   const pageFromUrl = parseInt(route.query.page);
 

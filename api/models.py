@@ -20,7 +20,7 @@ class Category(models.Model):
         return f"{self.name}"
     
     def get_absolute_url(self):
-        return f'/{self.slug}/'
+        return f'/catalog/{self.slug}/'
     
     def get_image_category(self):
         if(self.thumbnail):

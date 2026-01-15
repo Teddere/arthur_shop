@@ -18,6 +18,11 @@ const router = createRouter({
       name:'catalog',
       component: CatalogView,
     },
+    /*{
+      path:'/catalog/:category_slug',
+      name:'catalog_name',
+
+    },*/
     {
       path:'/:category_slug/:product_slug/',
       name:'detail',

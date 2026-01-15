@@ -10,7 +10,6 @@
     },
     methods: {
      getImageUrl(url){
-       console.log(url)
        if (!url) {
          return ''
        }else if(url.includes('media')) {

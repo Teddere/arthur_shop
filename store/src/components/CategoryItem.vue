@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router';
 defineProps({
   name_category: {
     type: String,
@@ -8,7 +9,7 @@ defineProps({
     type: String,
     required: true,
   },
-  category: {
+  category_url: {
     type: String,
     required: true,
   },
@@ -19,9 +20,9 @@ const getImageUrl = (imageName) => {
 }
 </script>
 <template>
-  <a href="#" class="category_item">
-    <img :src="getImageUrl(image)" :alt="category + ' image'" class="category__img" />
+  <RouterLink :to="category_url" class="category_item">
+    <img :src="getImageUrl(image)" :alt="name_category + ' image'" class="category__img" />
     <h3 class="category__title">{{ name_category }}</h3>
-  </a>
+  </RouterLink>
 </template>
 

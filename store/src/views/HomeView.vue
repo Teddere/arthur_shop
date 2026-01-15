@@ -248,11 +248,11 @@ export default {
           },
         }"
       >
-        <SwiperSlide v-for="category in categoryItem" :key="category.id">
+        <SwiperSlide v-for="(category,index) in categoryItem" :key="index">
           <CategoryItem
             :name_category="category.name"
             :image="category.get_image_category"
-            :category="category.name"
+            :category_url="category.get_absolute_url"
           ></CategoryItem>
         </SwiperSlide>
       </Swiper>

@@ -11,6 +11,36 @@ class CategoryList(APIView):
         categories = Category.objects.all()[:10]
         serializer = CategoryDetailSerializer(categories,many=True)
         return Response(serializer.data)
+class CategoryListSelect(APIView):
+    def get_object_select(self,category_name):
+        try:
+            product = Product.objects.filter(category__name=category_name)
+            return product
+        except Product.DoesNotExist:
+            raise Http404
+    
+    def get(self,request,category_slug,format=None):
+        product = self.get_object_select(category_slug)
+        serializer = ProductSerializer(product,many=True)
+        return Response(serializer.data)
+
+class CategoryDetailSelect(APIView):
+    def get_object_select(self,category_slug):
+        try:
+            product = Product.objects.filter(category__slug=category_slug)[:5]
+            return product
+        except Product.DoesNotExist:
+            raise Http404
+    def get(self,request,category_slug):
+        products = self.get_object_select(category_slug)
+        serializer = ProductSerializer(products,many=True)
+        return Response(serializer.data)
+
+class ProductList(APIView):
+    def get(self,request,format=None):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products,many=True)
+        return Response(serializer.data)
 
 class ProductListSelect(APIView):
     def get_object_select(self,badge):

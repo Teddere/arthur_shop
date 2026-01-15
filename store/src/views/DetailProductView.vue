@@ -1,6 +1,6 @@
 <script setup>
   import axios from "axios";
-  import {ref,onMounted} from 'vue';
+  import {ref,onMounted,watch} from 'vue';
   import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
@@ -45,60 +45,16 @@
     { title: 'Couleurs', content: 'Noir,Blanc,Vert' }
   ];
 
-
-  productList.value = [
-    {
-      id: 3,
-      imgDefault: 'shoe-5.png',
-      imgHover: 'shoe-7.png',
-      badge: '-22%',
-      badgeClass: 'light-pink',
-      category: 'Chaussure',
-      title: 'Weston Mark Time',
-      newPrice: 450.00,
-      oldPrice: 599.90
-    },
-    {
-      id: 6,
-      imgDefault: 'sandals.png',
-      imgHover: 'sandals-1.png',
-      badge: 'Nouveauté',
-      badgeClass: '',
-      category: 'Sandale',
-      title: 'Lacost drum',
-      newPrice: 50.90,
-      oldPrice: 99.90
-    },
-    {
-      id: 9,
-      imgDefault: 'scarf.png',
-      imgHover: 'scarf-1.png',
-      badge: '-30%',
-      badgeClass: 'light-pink',
-      category: 'Foulards',
-      title: 'Tiffany Chou',
-      newPrice: 9.90,
-      oldPrice: 19.90
-    },
-    {
-      id: 12,
-      imgDefault: 'pull-4.png',
-      imgHover: 'pull-3.png',
-      badge: '',
-      badgeClass: '',
-      category: 'Pull',
-      title: 'Cromatic',
-      newPrice: 60.00,
-      oldPrice: 90.00
-    },
-  ]
-  const getImageUrl = (url)=>{
-    console.log(url)
-    if (url.includes('media')) {
-      return url
-    }
-    return new URL(`../assets/images/${url}`,import.meta.url).href;
-  }
+const getImageUrl = (url)=>{
+       if (!url) {
+         return ''
+       }else if(url.includes('media')) {
+         return url
+       }
+       else {
+         return new URL(`../assets/images/${url}`, import.meta.url).href
+         }
+       }
   // Review
   const noteReview = ref(0);
   const hoverReview = ref(0);
@@ -112,9 +68,8 @@
     const category_slug = route.params.category_slug;
     const product_slug = route.params.product_slug;
     axios
-      .get(`api/v1/products/${category_slug}/${product_slug}`)
+      .get(`/api/v1/products/${category_slug}/${product_slug}`)
       .then(response=>{
-        console.log(response.data)
         selectImage.value = response.data.get_image_default;
         selectColor.value = response.data.color[0].value ? response.data.color[0]:null;
         selectSize.value = response.data.size ? response.data.size[0].code:null;
@@ -125,9 +80,38 @@
         console.log(err)
       })
   }
+  // list products
+  const getProductAll=()=>{
+    const category_slug = route.params.category_slug;
+    axios
+    .get(`/api/v1/categories/detail/${category_slug}`)
+    .then(response=>{
+      productList.value = response.data
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  }
   onMounted(()=>{
     getProduct()
+    getProductAll()
   })
+  watch(
+    ()=> route.params.product_slug,
+    ()=>{
+      product.value={};
+      selectImage.value = null;
+      selectColor.value = null;
+      selectSize.value = null;
+      activeTab.value = 'info';
+      links.value = [
+        { name: 'Accueil', nameUrl: 'home' },
+        { name: 'Catalogue', nameUrl: 'catalog' }
+      ];
+      getProduct();
+      getProductAll();
+    }
+  );
 </script>
 <template>
   <Breadcrumb :links="links" />
@@ -313,8 +297,8 @@
     <h3 class="section__title">Articles <span>Similiaires</span></h3>
     <div class="products__container grid">
       <productItem
-        v-for="prod in productList"
-        :key="prod.id"
+        v-for="(prod,index) in productList"
+        :key="index"
         :product="prod"
       ></productItem>
     </div>
