@@ -43,12 +43,6 @@ export default {
             /*
             {
               id:1,
-              imgDefault:'snearkes-1.png',
-              imgHover:'snearkes.png',
-              badge:'Nouveauté',
-              badgeClass:'light-blue',
-              category:'Sac',
-              title:'Converse all time',
               newPrice:'39.00',
               oldPrice:'59.90'
             },

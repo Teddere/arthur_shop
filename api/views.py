@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Product
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer,ProductDetailSerializer
 
 class LastProductsList(APIView):
     def get(self,request,format=None):
@@ -12,10 +12,15 @@ class LastProductsList(APIView):
         return Response(serializer.data)
 
 class ProductDetail(APIView):
-    def get_object(self,slug_category,slug_product):
+    def get_object(self,category_slug,product_slug):
         try:
-            product = self.get_object(slug_category,slug_product)
-            serializer = ProductSerializer(product)
-            return Response(serializer.data)
+           prod = Product.objects.filter(category__slug=category_slug).get(slug=product_slug)
+           print('Produit affiché',prod)
+           return prod
         except Product.DoesNotExist:
             raise Http404
+
+    def get(self,request,category_slug,product_slug,format=None):
+        product = self.get_object(category_slug,product_slug)
+        serializer = ProductDetailSerializer(product)
+        return Response(serializer.data)

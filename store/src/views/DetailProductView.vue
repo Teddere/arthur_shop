@@ -1,10 +1,11 @@
 <script setup>
+  import axios from "axios";
   import {ref,onMounted} from 'vue';
-  import axios  from "axios";
   import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
 
+  const route = useRoute()
   const links = ref([]);
   const productList = ref([]);
   const product = ref({});
@@ -32,6 +33,9 @@
       image:'manteau-2.jpg'
     },
   ]);
+  const selectImage = ref(null);
+  const selectColor = ref(null);
+  const selectSize = ref(null);
   const productInfo = [
     { title: 'Composition', content: 'Polyster 85%, Visco 10%, Elasthanne' },
     { title: 'Matière', content: 'Coton, Laine, Cuir, Polyester, Lin, etc.' },
@@ -39,29 +43,9 @@
     { title: 'Stock', content: 'Géré par taille/couleur si applicable' },
     { title: 'Taille', content: 'XS, S, M, L, XL' },
     { title: 'Couleurs', content: 'Noir,Blanc,Vert' }
-  ]
+  ];
 
-  product.value = {
-    'ref':'FWM15VKT',
-    'name':'Pull Rousseur brun',
-    'defaultImg':'sweater.png',
-    'imgItem': ['sweater-1.png','sweater.png','pul.png'],
-    'brand': 'Adidas',
-    'newPrice': 75.00,
-    'oldPrice': 90.00,
-    'percent': 22,
-    'warranty': 1,
-    'return': 15,
-    'colors':['hsl(37,100%,65%)','hsl(353,100%,67%)','hsl(49,100%,60%)','hsl(304,100%,78%)','hsl(126,61%,52%)'],
-    'sizes':['S','M','L','XL','XXL'],
-    'stock': 10,
-    'tags':['Linne','Mixte','Pull'],
-    'description':"Lorem ipsum dolor sit amet, consectetur adipisicing elit.Tenetur ad nihil iste provident sapiente corporis distinctio dolores natus voluptate nulla! Cumque quas saepe provident, laborum ducimuslaudantium accusamus beatae quis."
-  }
 
-  const selectImage = ref(product.value.imgItem.find((item)=> item === product.value.defaultImg))
-  const selectColor = ref(product.value.colors[0]);
-  const selectSize = ref(product.value.sizes[0]);
   productList.value = [
     {
       id: 3,
@@ -108,23 +92,38 @@
       oldPrice: 90.00
     },
   ]
-
   const getImageUrl = (url)=>{
-    return new URL(`../assets/images/${url}`,import.meta.url).href
+    console.log(url)
+    if (url.includes('media')) {
+      return url
+    }
+    return new URL(`../assets/images/${url}`,import.meta.url).href;
   }
   // Review
   const noteReview = ref(0);
   const hoverReview = ref(0);
   links.value = [
     { 'name': 'Accueil', 'nameUrl': 'home' },
-    { 'name': 'Catalogue', 'nameUrl': 'catalog' },
-    { 'name': product.value.name, 'nameUrl': 'catalog' },
+    { 'name': 'Catalogue', 'nameUrl': 'catalog' }
   ]
 
   // product
   const getProduct = ()=>{
-
-
+    const category_slug = route.params.category_slug;
+    const product_slug = route.params.product_slug;
+    axios
+      .get(`api/v1/products/${category_slug}/${product_slug}`)
+      .then(response=>{
+        console.log(response.data)
+        selectImage.value = response.data.get_image_default;
+        selectColor.value = response.data.color[0].value ? response.data.color[0]:null;
+        selectSize.value = response.data.size ? response.data.size[0].code:null;
+        links.value.push({'name':response.data.title,'nameUrl':null})
+        product.value = response.data;
+      })
+      .catch(err=>{
+        console.log(err)
+      })
   }
   onMounted(()=>{
     getProduct()
@@ -138,36 +137,38 @@
       <div class="details___group">
         <img :src="getImageUrl(selectImage)" alt="product image" class="details__img" >
         <div class="detail__small-images grid">
-          <img
-            v-for="(image,index) in product.imgItem"
-            :key="index"
-            :src="getImageUrl(image)"
-            @click="selectImage = image"
-            :class="{'active': selectImage === image}"
+          <img :src="product.get_image_default"
+            @click="selectImage = product.get_image_default"
+            :class="{'active': selectImage === product.get_image_default}"
+            alt="description product image"
+            class="details__small-img"
+          >
+          <img :src="product.get_image_hover"
+            @click="selectImage = product.get_image_hover"
+            :class="{'active': selectImage === product.get_image_hover}"
             alt="description product image"
             class="details__small-img"
           >
         </div>
       </div>
       <div class="details___group">
-        <h3 class="details__title">{{product.name}}</h3>
+        <h3 class="details__title">{{product.title}}</h3>
         <p class="details__brand">Marque: <span>{{product.brand}}</span></p>
-        <div class="details__price flex">
+        <div class="details__price flex" v-if="product.newPrice">
           <span class="new__price">{{product.newPrice}} €</span>
           <span class="old__price">{{product.oldPrice}} €</span>
           <span class="save__price">{{product.percent}}% de réduction</span>
+        </div>
+        <div class="details__price flex" v-else>
+          <span class="new__price">{{product.oldPrice}} €</span>
         </div>
         <p class="short__description">{{product.description}}</p>
         <ul class="product__list">
           <li class="list__item flex">
             <i class="fa-solid fa-crown"></i>
             <template v-if="product.warranty === 1"> 1 an de garantie de fabrication</template>
-            <template v-else>{{product.warranty}} ans de garantie de fabrication</template>
-          </li>
-          <li class="list__item flex">
-            <i class="fa-solid fa-refresh"></i>
-            <template v-if="product.return < 15 ">Pas de retour possible</template>
-            <template v-else>{{product.return}} jours pour un retour.</template>
+            <template v-else-if="product.warranty > 1">{{product.warranty}} ans de garantie de fabrication</template>
+            <template v-else>Article non garanti</template>
           </li>
           <li class="list__item flex">
             <i class="fa-solid fa-credit-card"></i>
@@ -176,12 +177,12 @@
         </ul>
         <div class="details__color flex">
           <span class="details__color-title">Couleur</span>
-          <ul class="color__list" v-if="product.colors">
-            <li v-for="(color,index) in product.colors" :key="index" >
+          <ul class="color__list" v-if="product.color">
+            <li v-for="(color,index) in product.color" :key="index" >
               <button type="button"
-                :style="{backgroundColor:color}"
-                :class="{'active': selectColor === color}"
-                @click="selectColor = color"
+                :style="{backgroundColor:color.value}"
+                :class="{'active': selectColor === color.value}"
+                @click="selectColor = color.value"
                 class="color__link"
               ></button>
             </li>
@@ -191,17 +192,18 @@
         </div>
         <div class="details__size flex">
           <span class="details__size-title">Taille</span>
-          <ul class="size__list">
-            <li v-for="(size,index) in product.sizes" :key="index">
+          <ul class="size__list" v-if="product.size">
+            <li v-for="(size,index) in product.size" :key="index">
               <button type="button"
-                      @click="selectSize = size"
-                      :class="{'size-active': selectSize === size}"
+                      @click="selectSize = size.code"
+                      :class="{'size-active': selectSize === size.code}"
                       class="size__link"
               >
-                {{size}}
+                {{size.code}}
               </button>
               </li>
           </ul>
+          <span v-else>Taille unique</span>
         </div>
         <form >
           <div class="details__action">
@@ -216,9 +218,9 @@
           <li class="meta__list flex">Ref:<span> {{product.ref}}</span></li>
           <li class="meta__list flex">
             Etiquette:
-            <template v-for="(tag,index) in product.tags" :key="index">
-              <span v-if="index < product.tags.length - 1">{{tag}},</span>
-              <span v-else>{{tag}}</span>
+            <template v-for="(tag,index) in product.tag" :key="index">
+              <span v-if="index < product.tag.length - 1">{{tag.name}},</span>
+              <span v-else>{{tag.name}}</span>
             </template>
           </li>
           <li class="meta__list flex">

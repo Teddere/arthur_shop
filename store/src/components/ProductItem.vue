@@ -6,9 +6,21 @@
     props:{
       product:{
         type:Object,
-        required:true
       }
     },
+    methods: {
+     getImageUrl(url){
+       console.log(url)
+       if (!url) {
+         return ''
+       }else if(url.includes('media')) {
+         return url
+       }
+       else {
+         return new URL(`../assets/images/${url}`, import.meta.url).href
+         }
+       }
+     },
     components: {
       RouterLink
     }
@@ -17,10 +29,10 @@
 <template>
   <article class="product__item">
     <div class="product__banner">
-      <a href="#" class="product__images">
-        <img :src="product.get_image_default" alt="product image" class="product__img default">
-        <img :src="product.get_image_hover" alt="product image" class="product__img hover">
-      </a>
+      <RouterLink :to="product.get_absolute_url ? product.get_absolute_url : '#'" class="product__images">
+        <img :src="getImageUrl(product.get_image_default)" alt="product image" class="product__img default">
+        <img :src="getImageUrl(product.get_image_hover)" alt="product image" class="product__img hover">
+      </RouterLink>
       <div class="product__actions">
         <a href="#" class="action__btn" aria-label="Aperçu">
           <i class='fa-solid fa-expand'></i>
@@ -36,7 +48,7 @@
     </div>
     <div class="product_content">
       <span class="product__category">{{product.category.name}}</span>
-      <RouterLink :to="product.get_absolute_url">
+      <RouterLink :to="product.get_absolute_url ? product.get_absolute_url : '#'">
         <h3 class="product__title">{{product.title}}</h3>
       </RouterLink>
       <div class="product__rating">
@@ -46,9 +58,12 @@
         <i class="fa-regular fa-star"></i>
         <i class="fa-regular fa-star"></i>
       </div>
-      <div class="product__price flex">
+      <div class="product__price flex" v-if="product.newPrice">
         <span class="new__price">{{product.newPrice}} €</span>
         <span class="old__price">{{product.oldPrice}} €</span>
+      </div>
+      <div class="product__price flex" v-else>
+        <span class="new__price">{{product.oldPrice}} €</span>
       </div>
       <a href="#"  class="action__btn cart__btn" aria-label="Ajouter au panier">
           <i class="fa-solid fa-plus"></i>
