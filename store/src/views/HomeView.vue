@@ -14,16 +14,7 @@ import ShowaseItem from '@/components/ShowaseItem.vue'
 export default {
   data: () => {
     return {
-      categoryItem: [
-        { id: 1, name: 'Pull', category: 'sweater', image: 'pull-2.png' },
-        { id: 2, name: 'Sac', category: 'bag', image: 'bag.png' },
-        { id: 3, name: 'Sneakers', category: 'snearkers', image: 'snearkes.png' },
-        { id: 4, name: 'Foulards', category: 'scarf', image: 'scarf-1.png' },
-        { id: 5, name: 'Sandales', category: 'sandale', image: 'sandals.png' },
-        { id: 6, name: 'Oreillers', category: 'cushion', image: 'cushion-1.png' },
-        { id: 7, name: 'Manteaux', category: 'coat', image: 'coat.png' },
-        { id: 8, name: 'chapeaux', category: 'hat', image: 'chapeau.png' },
-      ],
+      categoryItem: [],
       activeTab : 'new',
       tabs: [
         {
@@ -37,163 +28,12 @@ export default {
           products:[]
         },
         {
-          id:'moment',
+          id:'edit',
           label:'Article du moment',
-          products: [
-            /*
-            {
-              id:1,
-              newPrice:'39.00',
-              oldPrice:'59.90'
-            },
-            {
-              id:2,
-              imgDefault:'product-1-1.jpg',
-              imgHover:'product-1-2.jpg',
-              badge:'promo',
-              badgeClass:'',
-              category:'Foulards',
-              title:'Hawaii Thuph',
-              newPrice:'25.00',
-              oldPrice:'35.00'
-            },
-            {
-              id:3,
-              imgDefault:'sandals.png',
-              imgHover:'sandals-1.png',
-              badge:'Nouveauté',
-              badgeClass:'',
-              category:'Sandale',
-              title:'Lacost drum',
-              newPrice:'50.90',
-              oldPrice:'99.90'
-            },
-            {
-              id:4,
-              imgDefault:'shoe-5.png',
-              imgHover:'shoe-7.png',
-              badge:'-22%',
-              badgeClass:'light-pink',
-              category:'Chaussure',
-              title:'Weston Mark Time',
-              newPrice:'450.00',
-              oldPrice:'599.90'
-            },
-            {
-              id:5,
-              imgDefault:'bag.png',
-              imgHover:'bag-3.png',
-              badge:'collection',
-              badgeClass:'light-orange',
-              category:'Sac',
-              title:'Hermes Lagardène',
-              newPrice:'5000.00',
-              oldPrice:'8699.99'
-            },
-            {
-              id:6,
-              imgDefault:'pull-1.png',
-              imgHover:'pull-2.png',
-              badge:'collection',
-              badgeClass:'light-blue',
-              category:'Pull',
-              title:'Pull Pouma white',
-              newPrice:'89.90',
-              oldPrice:'99.99'
-            },
-            {
-              id:7,
-              imgDefault:'polo.png',
-              imgHover:'polo-2.png',
-              badge:'',
-              badgeClass:'',
-              category:'Pull',
-              title:'Tiffany Grey',
-              newPrice:'40.00',
-              oldPrice:'69.90'
-            },
-            {
-              id:8,
-              imgDefault:'scarf.png',
-              imgHover:'scarf-1.png',
-              badge:'-30%',
-              badgeClass:'light-pink',
-              category:'Foulards',
-              title:'Tiffany Chou',
-              newPrice:'9.90',
-              oldPrice:'19.90'
-            },*/
-          ]
+          products: []
         }
       ],
-      arrivals : [
-        {
-          id:1,
-          imgDefault:'sweater-1.png',
-          imgHover:'sweater.png',
-          badge:'',
-          badgeClass:'',
-          category:'Pull',
-          title:'Pull Rousseur',
-          newPrice:'75.00',
-          oldPrice:'90.00'
-        },
-        {
-          id:2,
-          imgDefault:'sneakers-3.png',
-          imgHover:'sneakers-4.png',
-          badge:'Collection',
-          badgeClass:'light-orange',
-          category:'Sneakers',
-          title:'All Star',
-          newPrice:'70.00',
-          oldPrice:'90.00'
-        },
-        {
-          id:3,
-          imgDefault:'t-shirt.png',
-          imgHover:'t-shirt--1.png',
-          badge:'Promo',
-          badgeClass:'light-blue',
-          category:'T-shirt',
-          title:'Nike Workers',
-          newPrice:'70.00',
-          oldPrice:'90.00'
-        },
-        {
-          id:4,
-          imgDefault:'shirt-3.png',
-          imgHover:'shirt-2.png',
-          badge:'',
-          badgeClass:'',
-          category:'Chemise',
-          title:'Carrinton',
-          newPrice:'80.00',
-          oldPrice:'120.00'
-        },
-        {
-          id:5,
-          imgDefault:'t-shirt-6.png',
-          imgHover:'t-shirt-6-1.png',
-          badge:'50%',
-          badgeClass:'',
-          category:'T-shirt',
-          title:'Lutin',
-          newPrice:'40.00',
-          oldPrice:'80.00'
-        },
-        {
-          id:6,
-          imgDefault:'pul.png',
-          imgHover:'sweater-3.png',
-          badge:'Collection',
-          badgeClass:'light-green',
-          category:'Pull',
-          title:'Flamer',
-          newPrice:'70.00',
-          oldPrice:'90.00'
-        }
-      ],
+      arrivals : [],
       showcases : [
         {
           id:1,
@@ -271,9 +111,9 @@ export default {
     }
   },
   mounted() {
-
-    this.getProductAll()
-
+    this.getCategoryAll()
+    this.getProductSelected()
+    this.getProductLast()
     this.date = Date.now()
     this.timer = setInterval(()=>{
       this.date = Date.now()
@@ -286,18 +126,43 @@ export default {
   },
   methods:{
 
-    getProductAll(){
+    getProductLast(){
       axios
         .get('/api/v1/last-products/')
         .then(response => {
-          console.log(response.data)
-            this.tabs.forEach((item)=>{
-              item.products = response.data;
-            });
+          this.arrivals = response.data
+
         })
         .catch(err => {
           console.log(err)
         });
+    },
+    getCategoryAll(){
+      axios
+        .get('/api/v1/categories/')
+        .then(response => {
+          this.categoryItem = response.data;
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+    },
+    getProductSelected(){
+      axios
+        .get('/api/v1/products/selected/')
+        .then(response=>{
+            response.data.find((item)=>{
+              this.tabs.forEach((tab)=>{
+                if(tab.id==item.name) {
+                  tab.products = item.products
+                }
+              })
+            })
+
+        })
+        .catch(err=>{
+          console.log(err)
+        })
     },
     getTimeRemaining(endDate){
       const total = new Date(endDate).getTime() - this.date;
@@ -386,8 +251,8 @@ export default {
         <SwiperSlide v-for="category in categoryItem" :key="category.id">
           <CategoryItem
             :name_category="category.name"
-            :image="category.image"
-            :category="category.category"
+            :image="category.get_image_category"
+            :category="category.name"
           ></CategoryItem>
         </SwiperSlide>
       </Swiper>
@@ -498,7 +363,7 @@ export default {
 
         }"
       >
-      <SwiperSlide v-for="product in arrivals" v-bind:key="product.id">
+      <SwiperSlide v-for="(product,index) in arrivals" v-bind:key="index">
         <ProductItem :product="product"></ProductItem>
       </SwiperSlide>
       </Swiper>

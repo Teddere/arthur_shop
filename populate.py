@@ -7,101 +7,68 @@ from api.models import Product,Category,Size,Color,Badge,Tag
 
 from faker import Faker
 
-def populate_category_table():
-    
-    liste = [
-        {'id':1,'name':'Sneakers','image':'images/snearkes.png'},
-        {'id':2,'name':'T-shirt','image':'images/t-shirt.png'},
-        {'id':3,'name':'Chaussure','image':'images/shoes-11.png'},
-        {'id':4,'name':'Manteaux','image':'images/coat-4.png'},
-        {'id':5,'name':'Chemise','image':'images/shirt.png'},
-        {'id':6,'name':'Pull','image':'images/pull-1.png'},
-        {'id':7,'name':'Short','image':'images/short.png'},
-        {'id':8,'name':'Sac','image':'images/bag-5.png'},
-        {'id':9,'name':'Accessoire','image':'images/banner_pub.jpg'},
-        {'id':10,'name':'Costume','image':'images/suit.png'},
-        {'id':11,'name':'Montre','image':'images/watch-5.png'},
-       ]
+faker = Faker()
 
-    for item in liste:
-        Category.objects.create(
-            name = item['name'],
-            thumbnail = item['image']
-        )
+list_category = [
+    {'id':1,'name':'Sneakers','image':'images/snearkes.png'},
+    {'id':2,'name':'T-shirt','image':'images/t-shirt.png'},
+    {'id':3,'name':'Chaussure','image':'images/shoes-11.png'},
+    {'id':4,'name':'Manteaux','image':'images/coat-4.png'},
+    {'id':5,'name':'Chemise','image':'images/shirt.png'},
+    {'id':6,'name':'Pull','image':'images/pull-1.png'},
+    {'id':7,'name':'Short','image':'images/short.png'},
+    {'id':8,'name':'Sac','image':'images/bag-5.png'},
+    {'id':9,'name':'Accessoire','image':'images/banner_pub.jpg'},
+    {'id':10,'name':'Costume','image':'images/suit.png'},
+    {'id':11,'name':'Montre','image':'images/watch-5.png'},
+]
+list_color = [
+    {'id':1,'name':'blanc','hex':'#F2F5F0'},
+    {'id':2,'name':'noir','hex':'#000000'},
+    {'id':3,'name':'gris','hex':'#808080'},
+    {'id':4,'name':'marron','hex':'#8B4513'},
+    {'id':5,'name':'bleu-ciel','hex':'#87ceeb'},
+    {'id':6,'name':'beige','hex':'#f5f5dc'},
+    {'id':7,'name':'argent','hex':'#c0c0c0'},
+    {'id':8,'name':'or','hex':'#ffd700'},
+    {'id':9,'name':'bleu','hex':'#000080'},
+    {'id':10,'name':'rose','hex':'#ffc0cb'},
+    {'id':11,'name':'violet','hex':'#800080'},
+    {'id':12,'name':'rouge','hex':'#ff0000'},
+    {'id':13,'name':'vert','hex':'#0A663B'},
+    {'id':14,'name':None,'hex':None}
+]
+list_badge = [
+    {'id':1,'name':'Promotion','className':None},
+    {'id':2,'name':'Collection','className':'light-blue'},
+    {'id':3,'name':'Nouveau','className':'light-green'},
+    {'id':4,'name':'Edition','className':'light-orange'},
+    {'id':5,'name':None,'className':None}
+]
 
-def populate_size_table():
-    liste = ['XS','S','M','L','XL','XXL','36','37','38','39','40','41','42','43','44','45']
-    for size in liste:
-        Size.objects.create(
-            code = size
-        )
+list_tag = [
+    {'id':1,'name':'Cuir'},
+    {'id':2,'name':'Rubber'},
+    {'id':3,'name':'Textile'},
+    {'id':4,'name':'Polyester'},
+    {'id':5,'name':'EVA'},
+    {'id':6,'name':'Mesh'},
+    {'id':7,'name':'Coton'},
+    {'id':8,'name':'Elasthanne'},
+    {'id':9,'name':'Molletonné'},
+    {'id':10,'name':'Nylon'},
+    {'id':11,'name':'Spandex'},
+    {'id':12,'name':'Soie'},
+    {'id':13,'name':'Cristal'},
+    {'id':14,'name':'Caoutchouc'},
+    {'id':15,'name':'Laine'},
+    {'id':16,'name':'Acier'},
+    {'id': 17, 'name': 'Saphir'},
+    {'id': 18, 'name': 'Or'},
+    {'id': 19, 'name': 'Monogram'},
+]
 
-def populate_color_table():
-    liste = [
-        {'id':1,'name':'blanc','hex':'#ffffff'},
-        {'id':2,'name':'noir','hex':'#000000'},
-        {'id':3,'name':'gris','hex':'#808080'},
-        {'id':4,'name':'marron','hex':'#8B4513'},
-        {'id':5,'name':'bleu-ciel','hex':'#87ceeb'},
-        {'id':6,'name':'beige','hex':'#f5f5dc'},
-        {'id':7,'name':'argent','hex':'#c0c0c0'},
-        {'id':8,'name':'or','hex':'#ffd700'},
-        {'id':9,'name':'bleu','hex':'#000080'},
-        {'id':10,'name':'rose','hex':'#ffc0cb'},
-        {'id':11,'name':'violet','hex':'#800080'},
-        {'id':12,'name':'rouge','hex':'#ff0000'},
-    ]
-    for color in liste:
-        Color.objects.create(
-            name = color['name'],
-            value = color['hex']
-        )
-
-
-def populate_badge_table():
-    liste = [
-        {'id':1,'name':'Promotion','className':None},
-        {'id':2,'name':'Collection','className':'light-blue'},
-        {'id':3,'name':'Nouveau','className':'light-green'},
-        {'id':4,'name':'Edition','className':'light-orange'},
-    ]
-    for badge in liste:
-        Badge.objects.create(
-            name = badge['name'],
-            className = badge['className']
-            )
-
-def populate_tag_table():
-    liste = [
-        {'id':1,'name':'Cuir'},
-        {'id':2,'name':'Rubber'},
-        {'id':3,'name':'Textile'},
-        {'id':4,'name':'Polyester'},
-        {'id':5,'name':'EVA'},
-        {'id':6,'name':'Mesh'},
-        {'id':7,'name':'Coton'},
-        {'id':8,'name':'Elasthanne'},
-        {'id':9,'name':'Molletonné'},
-        {'id':10,'name':'Nylon'},
-        {'id':11,'name':'Spandex'},
-        {'id':12,'name':'Soie'},
-        {'id':13,'name':'Cristal'},
-        {'id':14,'name':'Caoutchouc'},
-        {'id':15,'name':'Laine'},
-        {'id':16,'name':'Acier'},
-        {'id': 17, 'name': 'Saphir'},
-        {'id': 18, 'name': 'Or'},
-        {'id': 19, 'name': 'Monogram'},
-    ]
-    for tag in liste:
-        Tag.objects.create(
-            name = tag['name']
-        )
-
-
-def populate_product_table():
-    try:
-        listProduct = [
+listProduct = [
             {
                 'title': 'Nike Air Force 1',
                 'category': 'Sneakers',
@@ -502,7 +469,6 @@ def populate_product_table():
                 'imgDefault':'images/bac_lui.png',
                 'imgHover':'images/bag-1.png',
             },
-            #
             {
                 'title': 'Converse  Taylor All Star',
                 'category': 'Sneakers',
@@ -535,7 +501,6 @@ def populate_product_table():
                 'imgDefault': 'images/sneakers-3.png',
                 'imgHover': 'images/sneakers-4.png',
             },
-            # change les images
             {
                 'title': 'Vans Old Skool',
                 'category': 'Sneakers',
@@ -827,6 +792,57 @@ def populate_product_table():
                 'imgHover': 'images/watch-4.png',
             }
         ]
+list_size = [
+    None,'XS','S','M','L','XL','XXL','36','37','38','39','40','41','42','43','44','45'
+]
+list_imageHover = []
+list_imageDefault = []
+
+for image in listProduct:
+    list_imageHover.append(image['imgHover'])
+    list_imageDefault.append(image['imgDefault'])
+
+def populate_category_table():
+    for item in list_category:
+        Category.objects.create(
+            name = item['name'],
+            thumbnail = item['image']
+        )
+
+def populate_size_table():    
+    for size in list_size:
+        if size:
+            Size.objects.create(
+                code = size
+            )
+
+def populate_color_table():
+    for color in list_color:
+        if color['name']:
+            Color.objects.create(
+                name = color['name'],
+                value = color['hex']
+            )
+
+
+def populate_badge_table():
+    for badge in list_badge:
+        if badge['name']:
+            Badge.objects.create(
+                name = badge['name'],
+                className = badge['className']
+                )
+
+def populate_tag_table():
+    for tag in list_tag:
+        if tag['name']:
+            Tag.objects.create(
+                name = tag['name']
+            )
+
+
+def populate_product_table():
+    try:      
         for product_data in listProduct:
             category= Category.objects.get(name=product_data['category'])
             badge = None
@@ -867,9 +883,50 @@ def populate_product_table():
     except Exception as e:
         print(e)
 
-
+def populate_personal_product(nbre):
+    for _ in range(nbre):
+        category = Category.objects.get(name = random.choice(list_category)['name'])
+        badge = random.choice(list_badge)
+        badgeValue = None
+        if badge['name']:
+            badgeValue = Badge.objects.get(name=badge['name'])
+       
+        product = Product.objects.create(
+            title= faker.sentence(nb_words=3).replace('.', ''),
+            category=category,
+            badge = badgeValue,
+            brand=faker.company(),
+            percent = random.choice([None,15,20,25,30,40,45,50]),
+            stock = random.randint(5,50),
+            oldPrice = random.randint(50,2500),
+            warranty = random.randint(1,3),
+            description = faker.text(max_nb_chars=200),
+            imgDefault = random.choice(list_imageDefault),
+            imgHover = random.choice(list_imageHover)
+        )
+        colors = random.sample([c for c in list_color if c['name']], k=min(3, len([c for c in list_color if c['name']])))
+        colorValue = None
+        for color in colors:
+            if color['name']:
+                colorValue = Color.objects.get(name=color['name'])
+                product.color.add(colorValue)
+        
+        sizes = random.choices(list_size,k=4)
+        sizeValue = None
+        for size in sizes:
+            if size:
+                sizeValue = Size.objects.get(code=size)
+                product.size.add(sizeValue)
+        tags = random.choices(list_tag,k=3)
+        tagValue = None
+        for tag in tags:
+            if tag['name']:
+                tagValue = Tag.objects.get(name=tag['name'])
+                product.tag.add(tagValue)
+        print("Produit crée : ",product.title)
+        
 if __name__=='__main__':
-    
+    nbre = int(input('Entrer le nombre de produit \t'))
     print('Remplissage des catégories')
     populate_category_table()
     print('Remplissage des tailles')
@@ -883,3 +940,4 @@ if __name__=='__main__':
     print('Remplissage de produits')
     populate_product_table()
     print('Base de données remplie avec succès !')
+    populate_personal_product(nbre)   

@@ -72,6 +72,16 @@ class ProductDetailSerializer(ProductSerializer):
         )
 
 
+# Category
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = (
+            'name',
+            'slug',
+            'get_image_category',
+            'get_absolute_url'
+        )
 
 
 

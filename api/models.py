@@ -22,6 +22,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return f'/{self.slug}/'
     
+    def get_image_category(self):
+        if(self.thumbnail):
+            return f"http://127.0.0.1:8000{self.thumbnail.url}"
+        return ''
+
+    
     def save(self,*args,**kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
@@ -103,8 +109,8 @@ class Product(models.Model):
     slug = models.SlugField(unique=True,blank=True,max_length=50)
 
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    size = models.ManyToManyField(Size,null=True,blank=True)
-    tag = models.ManyToManyField(Tag,null=True,blank=True)
+    size = models.ManyToManyField(Size,blank=True)
+    tag = models.ManyToManyField(Tag,blank=True)
     color = models.ManyToManyField(Color)
     badge = models.ForeignKey(Badge,on_delete=models.SET_NULL,blank=True,null=True)
     brand = models.CharField(max_length=100,blank=True,null=True)
