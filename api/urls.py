@@ -4,7 +4,7 @@ from api import views
 app_name = 'api'
 urlpatterns = [
     path('categories/',views.CategoryList.as_view(),name='category_all'),
-    path('categories/<slug:category_slug>',views.CategoryListSelect.as_view()),
+    path('catalog/<slug:category_slug>/',views.CategoryListSelect.as_view()),
     path('categories/detail/<slug:category_slug>/',views.CategoryDetailSelect.as_view(),name='category_detail'),
     path('products/all/',views.ProductList.as_view(),name='product_all'),
     path('products/selected/',views.ProductListSelect.as_view(),name='product_select'),

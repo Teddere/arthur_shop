@@ -32,6 +32,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
+            'id',
             'title',
             'badge',
             'category',
@@ -39,6 +40,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'oldPrice',
             'color',
             'stock',
+            'description',
             'get_image_default',
             'get_image_hover',
             'get_absolute_url',
@@ -54,6 +56,7 @@ class ProductDetailSerializer(ProductSerializer):
     class Meta:
         model = Product
         fields = (
+            'id',
             'title',
             'ref',
             'brand',

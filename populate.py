@@ -799,8 +799,8 @@ list_imageHover = []
 list_imageDefault = []
 
 for image in listProduct:
-    list_imageHover.append(image['imgHover'])
-    list_imageDefault.append(image['imgDefault'])
+    list_imageHover.append(image['imgDefault'])
+    list_imageDefault.append(image['imgHover'])
 
 def populate_category_table():
     for item in list_category:

@@ -82,7 +82,7 @@ export default {
           newPrice:99.90,
           oldPrice:160.00,
           countdownText:"Dépêchez-vous, l'offre se termine bientôt :",
-          endDate:"2026-01-12T23:59:59Z"
+          endDate:"2026-01-18T23:59:59Z"
         },
         {
           id:2,
@@ -92,7 +92,7 @@ export default {
           newPrice:99.90,
           oldPrice:160.00,
           countdownText:"Dépêchez-vous, l'offre se termine bientôt :",
-          endDate:"2026-01-10T23:59:59Z"
+          endDate:"2026-01-19T23:59:59Z"
         },
       ],
       timer:null
@@ -153,7 +153,7 @@ export default {
         .then(response=>{
             response.data.find((item)=>{
               this.tabs.forEach((tab)=>{
-                if(tab.id==item.name) {
+                if(tab.id===item.name) {
                   tab.products = item.products
                 }
               })
@@ -353,7 +353,7 @@ export default {
             spaceBetween: 20,
           },
           992: {
-            slidesPerView: 3,
+            slidesPerView: 4,
             spaceBetween: 20
           },
           1400: {

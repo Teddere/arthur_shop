@@ -18,6 +18,11 @@
   --border-color-alt: hsl(201, 15%, 90%);
   --border-color-dark: hsl(0,0%,20%);
   --light-color: #eef1f2;
+  --green-color: #27ae60;
+  --red-color:#e74c3c;
+  --warning-color: #f39c12;
+  --info-color: #3498db;
+
   /*========= Font and typography =====*/
   --body-font: 'lato', sans-serif;
   --second-font: 'Spartan', sans-serif;

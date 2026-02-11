@@ -345,6 +345,7 @@
    /* AJout */
    transform: translateY(20px);
    transition: all 0.3s var(--transition);
+   cursor: pointer;
  }
  /* AJout */
 /* Délais d'animation pour chaque bouton */
@@ -736,6 +737,7 @@
 .breadcrumb__link {
   color: var(--text-color);
   font-size: var(--small-font-size);
+  text-transform: capitalize;
 }
 /* =================== SHOP ========================== */
 .total__products {
@@ -943,10 +945,18 @@
   font-size: var(--small-font-size);
 }
 .quantity {
-  width: 80px;
+  width: 40px;
   padding-block: .5rem;
   padding-inline: 1rem .5rem;
   border-radius: .25rem;
+}
+.quantity::-webkit-outer-spin-button,
+.quantity::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.quantity[type=number] {
+  -moz-appearance: textfield;
 }
 .details__action-btn {
   color: var(--text-color);
@@ -1069,6 +1079,252 @@
 .login-register__container .btn {
   width: 100%;
 }
+/* =============== CART ============================= */
+.table__container {
+  overflow-x: auto;
+}
+.table {
+  table-layout: fixed;
+  margin-bottom: 2rem;
+}
+.table tr {
+  border-top: 1px solid var(--border-color-alt);
+}
+.table tr:last-child {
+  border-bottom: 1px solid var(--border-color-alt);
+}
+.table tr th:nth-child(1),
+.table tr td:nth-child(1) {
+  width: 140px;
+}
+.table tr th:nth-child(2),
+.table tr td:nth-child(2) {
+  width: 330px;
+}
+.table tr th:nth-child(3),
+.table tr td:nth-child(3) {
+  width: 80px;
+}
+.table tr th:nth-child(4),
+.table tr td:nth-child(4) {
+  width: 160px;
+}
+.table tr th:nth-child(5),
+.table tr td:nth-child(5) {
+  width: 160px;
+}
+.table tr th:nth-child(6),
+.table tr td:nth-child(6) {
+  width: 100px;
+}
+.table__img {
+  width: 80px;
+  object-fit: cover;
+  object-position: center;
+  background-color: var(--light-color);
+}
+.table tr th,
+.table tr td {
+  padding: .5rem;
+  text-align: center;
+}
+.table__title,
+.table__description,
+.table__price,
+.table__subtotal,
+.table__trash,
+.table__stock {
+  font-size: var(--small-font-size);
+}
+.table__title,
+.table__stock {
+  color: var(--primary-color);
+}
+.table__description {
+  text-align: left;
+  max-width: 250px;
+  margin-inline: auto;
+}
+.table__trash {
+  color: var(--text-color-light);
+  cursor: pointer;
+}
+.btn__carts .quantity {
+  border-radius: 0;
+}
+.btn__carts {
+  display: flex;
+  justify-content: center;
+}
+.btn-cart {
+  display:inline-block;
+  width: 30px;
+  font-size: .8rem;
+  color: var(--body-color);
+  background: var(--primary-color);
+  border-radius: 0.2rem 0 .2rem;
+  cursor: pointer;
+}
+.btn-cart.btn-up {
+  border-radius: .2rem 0 0 .2rem;
+}
+.btn-cart.btn-down {
+  border-radius: 0 .2rem .2rem 0 ;
+}
+.cart__action {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin-top: 1.5rem;
+}
+.divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.divider::before {
+   content: '';
+   position: absolute;
+   top: 50%;
+   left: 0;
+   width: 100%;
+   border-top: 2px solid var(--border-color-alt);
+}
+.divider i {
+  position: relative;
+  z-index: 10;
+  background-color: var(--body-color);
+  padding: 0 1.5rem;
+  color: var(--text-color-light);
+  line-height: 1;
+}
+.cart__group {
+  grid-template-columns: 1fr;
+  align-items: flex-start;
+  row-gap: 2.75rem;
+}
+.cart__shipping .section__title,
+.cart__coupon .section__title,
+.cart__total .section__title {
+  font-size: var(--large-font-size);
+  margin-bottom: 1rem;
+}
+.cart__coupon {
+  margin-top: 3rem;
+}
+.coupon__form {
+  display: flex;
+}
+.coupon__form .btn,
+.coupon__form .form__input {
+  font-size: var(--small-font-size);
+}
+.coupon__form .form__input {
+  border-radius: .25rem 0 0 .25rem ;
+  width: 100%;
+  height: 48px;
+}
+.coupon__form .btn {
+  border-radius: 0 .25rem .25rem 0;
+  letter-spacing: .5px;
+  font-weight: var(--weight-500);
+}
+.cart__total {
+  border: 1px solid var(--border-color-alt);
+  border-radius: .25rem;
+  padding: 1.25rem;
+}
+.cart__total .btn {
+  display: inline-flex;
+}
+.cart__total-table {
+  margin-bottom: 1rem;
+}
+.cart__total-table tr td {
+  display: block;
+  width: 100%;
+  padding: .75rem .5rem;
+  border: 1px solid var(--border-color-alt);
+}
+.cart__total-title {
+  font-size: var(--small-font-size);
+}
+.cart__total-price {
+  color: var(--primary-color);
+  font-weight: var(--weight-700);
+}
+/* =================== ACCOUNT =================== */
+.accounts__container {
+  grid-template-columns: 1fr;
+}
+.account__tabs {
+  border: 1px solid var(--border-color-alt);
+  border-radius: .25rem;
+}
+.account__tab {
+  padding: .75rem 1rem;
+  color: var(--title-color);
+  font-size: var(--small-font-size);
+  display: flex;
+  align-items: center;
+  column-gap: .625rem;
+  cursor: pointer;
+}
+.account__tab.active-tab {
+  background: var(--primary-color);
+  color: var(--body-color);
+}
+.account__tab:not(:last-child) {
+  border-bottom: 1px solid var(--border-color-alt);
+}
+.tab__content:not(.active-tab) {
+  display: none;
+}
+.tab__content {
+  border: 1px solid var(--border-color-alt);
+}
+.tab__header {
+  background-color: var(--light-color);
+  border-bottom: 1px solid var(--border-color-alt);
+  font-size: var(--small-font-size);
+  padding: .75rem;
+}
+.tab__body {
+  padding: .75rem;
+}
+.placed__order-table tr th {
+  color: var(--title-color);
+  text-align: left;
+}
+.placed__order-table tr th {
+  display: none;
+}
+.placed__order-table tr td {
+  display: block;
+}
+.placed__order-table tr th,
+.placed__order-table tr td {
+  border: 1px solid var(--border-color-alt);
+  padding: .5rem;
+  font-size: var(--small-font-size);
+}
+.view__order,
+.edit {
+  color: var(--primary-color);
+}
+.adress {
+  font-style: normal;
+  font-size: var(--small-font-size);
+  line-height: 1.5rem;
+}
+.city {
+   margin-bottom: .25rem;
+}
+.edit {
+   font-size: var(--small-font-size);
+}
 /* For small devices  */
 @media screen and (min-width: 350px){
   /*============ CATEGORIES =======================*/
@@ -1078,6 +1334,11 @@
     right: 20px;
     display: flex;
     gap: 10px;
+  }
+  /* =============== CART ============================= */
+  .cart__total-table tr td {
+    display: table-cell;
+    width: 50%;
   }
 }
 @media  screen and (min-width:576px) {
@@ -1114,7 +1375,18 @@
   }
   .login-register__container {
     grid-template-columns: max(500px);
-
+  }
+  /* =============== CART ============================= */
+  .cart__total {
+    padding: 1.75rem;
+  }
+  /* =================== ACCOUNT =================== */
+  .placed__order-table tr th,
+  .order__table tr th {
+    display: table-cell;
+  }
+  .placed__order-table tr td {
+    display: table-cell;
   }
 }
 /* For medium devices */
@@ -1137,6 +1409,11 @@
   /* =============== DETAILS =======================*/
   .details__container {
     grid-template-columns: repeat(2,1fr);
+  }
+  /* =================== ACCOUNT =================== */
+  .tab__header,
+  .tab__body {
+    padding: 1rem;
   }
 }
 @media  screen and (min-width:992px) {
@@ -1202,6 +1479,39 @@
   .login,
   .register {
     padding: 2rem;
+  }
+  /* =============== CART ============================= */
+  .table tr th:nth-child(1),
+  .table tr td:nth-child(1) {
+    width: 216px;
+  }
+  .table tr th:nth-child(2),
+  .table tr td:nth-child(2) {
+    width: 400px;
+  }
+  .table tr th:nth-child(3),
+  .table tr td:nth-child(3) {
+    width: 108px;
+  }
+  .table tr th:nth-child(4),
+  .table tr td:nth-child(4) {
+    width: 220px;
+  }
+  .table tr th:nth-child(5),
+  .table tr td:nth-child(5) {
+    width: 200px;
+  }
+  .table tr th:nth-child(6),
+  .table tr td:nth-child(6) {
+    width: 152px;
+  }
+  .cart__group {
+    grid-template-columns: repeat(2,1fr);
+    row-gap: initial;
+  }
+  /* =================== ACCOUNT =================== */
+  .accounts__container {
+    grid-template-columns: 3fr 9fr;
   }
 }
 /* For large devices */
@@ -1288,6 +1598,10 @@
   .size__link {
     padding: .375rem .75rem .5rem;
   }
+  /* =================== ACCOUNT =================== */
+  .account__tab {
+    padding: 1rem 2rem;
+  }
 }
 @media  screen and (min-width:1400px) {
   .container {
@@ -1296,5 +1610,9 @@
   /*=========== PRODUCTS =========================*/
   .products__container {
     grid-template-columns: repeat(5,1fr);
+  }
+  /* =================== ACCOUNT =================== */
+  .accounts__container {
+    grid-template-columns: 4fr 8fr;
   }
 }

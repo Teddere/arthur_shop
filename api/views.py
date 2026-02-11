@@ -11,10 +11,11 @@ class CategoryList(APIView):
         categories = Category.objects.all()[:10]
         serializer = CategoryDetailSerializer(categories,many=True)
         return Response(serializer.data)
+
 class CategoryListSelect(APIView):
-    def get_object_select(self,category_name):
+    def get_object_select(self,category_slug):
         try:
-            product = Product.objects.filter(category__name=category_name)
+            product = Product.objects.filter(category__slug=category_slug)
             return product
         except Product.DoesNotExist:
             raise Http404

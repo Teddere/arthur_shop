@@ -1,6 +1,7 @@
 <script setup>
   import {ref} from 'vue'
   import {RouterLink} from 'vue-router'
+  import {useCartStore} from '@/stores/store.js';
   const showMenu = ref(false)
   const openMenu = ()=>{
     showMenu.value = true;
@@ -8,6 +9,8 @@
   const closeMenu = ()=>{
     showMenu.value = false;
   }
+
+  const cart = useCartStore()
 </script>
 
 <template>
@@ -61,10 +64,10 @@
         </div>
       </div>
       <div class="header__user-actions">
-        <a href="#" class="header__action-btn">
+        <RouterLink :to="{name:'cart'}" class="header__action-btn">
           <i class="fa-solid fa-cart-shopping"></i>
-          <span class="count">0</span>
-        </a>
+          <span class="count">{{cart.itemCount}}</span>
+        </RouterLink>
         <a href="#" class="header__action-btn user-link">
           <i class="fa-solid fa-user"></i>
         </a>

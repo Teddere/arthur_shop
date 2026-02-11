@@ -2,11 +2,11 @@
 import Breadcrumb from "@/components/Breadcrumb.vue";
 import ProductItem from "@/components/ProductItem.vue";
 import Pagination from "@/components/Pagination.vue";
+import {useApi} from "@/composables/useApi.js";
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from "vue-router";
 
-import axios from "axios";
-
+const API = useApi();
 const route = useRoute();
 const router = useRouter();
 const products = ref([]);
@@ -26,7 +26,7 @@ const totalProducts = computed(() => products.value.length);
 const paginationProducts = computed(() => {
   const startIndex = (currentPage.value - 1) * itemPerPage.value;
   const endIndex = startIndex + itemPerPage.value;
-  return products.value.slice(startIndex, endIndex);
+  return products.value.slice(startIndex,endIndex);
 });
 
 // Nombre total de pages
@@ -60,15 +60,13 @@ const scrollToProducts = () => {
   }
 }
 
-const getProductAll = ()=>{
-  axios
-    .get('/api/v1/products/all/')
-    .then(response=>{
-      products.value = response.data
-    })
-    .catch(err=>{
-      console.log(err)
-    })
+const getProductAll = async()=>{
+  try {
+    products.value = await API.get('/api/v1/products/all/',5000,800);
+  } catch (err) {
+    console.error(err);
+  }
+
 }
 // Montage du composant
 onMounted(() => {
@@ -110,8 +108,8 @@ watch(() => route.query.page, (newPage) => {
 
     <div class="products__container grid">
       <ProductItem
-        v-for="product in paginationProducts"
-        :key="product.id"
+        v-for="(product,index) in paginationProducts"
+        :key="index"
         :product="product"
       />
     </div>

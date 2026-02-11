@@ -1,37 +1,36 @@
-<script>
+<script setup>
   import {RouterLink} from "vue-router";
+  import { useToastStore } from "@/stores/store.js";
+  import {useCartStore} from "@/stores/store.js";
 
-  export  default {
-    name:'ProductItem',
-    props:{
-      product:{
-        type:Object,
-      }
-    },
-    methods: {
-     getImageUrl(url){
-       if (!url) {
-         return ''
-       }else if(url.includes('media')) {
-         return url
-       }
-       else {
-         return new URL(`../assets/images/${url}`, import.meta.url).href
-         }
-       }
-     },
-    components: {
-      RouterLink
+  const props = defineProps({
+    product : {
+      type: Object,
+      required: true
     }
+  })
+  const toast = useToastStore();
+  const cart = useCartStore();
+
+  const getImageUrl = (url)=>{
+    if(!url) return '';
+    if (url.includes('http') || url.includes('media')) return url;
+    return new URL(`../assets/images/${url}`,import.meta.url).href;
+  }
+  const handleAddToCart = async ()=>{
+    cart.addToCart(props.product)
+    toast.success(`${props.product.title} ajouté au panier !`,3000);
   }
 </script>
 <template>
   <article class="product__item">
+    <!-- Bannière produit -->
     <div class="product__banner">
       <RouterLink :to="product.get_absolute_url ? product.get_absolute_url : '#'" class="product__images">
-        <img :src="getImageUrl(product.get_image_default)" alt="product image" class="product__img default">
-        <img :src="getImageUrl(product.get_image_hover)" alt="product image" class="product__img hover">
+        <img :src="getImageUrl(product.get_image_default)" loading="lazy" alt="product image" class="product__img default">
+        <img :src="getImageUrl(product.get_image_hover)" loading="lazy" alt="product image" class="product__img hover">
       </RouterLink>
+      <!-- Actions rapides -->
       <div class="product__actions">
         <a href="#" class="action__btn" aria-label="Aperçu">
           <i class='fa-solid fa-expand'></i>
@@ -64,12 +63,10 @@
       <div class="product__price flex" v-else>
         <span class="new__price">{{product.oldPrice}} €</span>
       </div>
-      <a href="#"  class="action__btn cart__btn" aria-label="Ajouter au panier">
-          <i class="fa-solid fa-plus"></i>
-      </a>
+      <button @click="handleAddToCart" aria-label="Ajouter au panier" type="button" class="action__btn cart__btn" >
+        <i class="fa-solid fa-plus"></i>
+      </button>
     </div>
   </article>
 </template>
-
-
 
