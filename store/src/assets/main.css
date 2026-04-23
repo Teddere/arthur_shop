@@ -1,10 +1,23 @@
 @import '../../node_modules/normalize.css/normalize.css';
 @import './base.css';
 /* ==================== header & nav ========= */
+.header-section.headerFixed {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: var(--body-color);
+  transition: box-shadow 0.3s ease;
+}
+.headerFixed {
+  box-shadow: 0 2px 16px hsla(0, 0%, 0%, 0.12);
+}
 .header__container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+.headerFixed .header__top {
+  display: none;
 }
 .header__top {
   display: none;

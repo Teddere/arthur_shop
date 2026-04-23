@@ -13,41 +13,49 @@ import AccountView from "@/views/AccountView.vue";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    // home page
     {
       path: '/',
       name: 'home',
       component: HomeView,
     },
+    // catalog
     {
       path:'/catalog',
       name:'catalog',
       component: CatalogView,
     },
+    // cart
     {
       path:'/cart',
       name:'cart',
       component: CartView,
     },
+    // category name catalog
     {
       path:'/catalog/:category_slug/',
       name:'catalog_name',
       component: CatalogDetail,
     },
+    // Detail product
     {
       path:'/:category_slug/:product_slug/',
       name:'detail',
       component: DetailProductView,
     },
+    // login page
     {
       path:'/login',
       name:'login',
       component: LoginView
     },
+    // register page
     {
       path:'/register',
       name:'register',
       component: RegisterView
     },
+    // account page
     {
       path:'/account',
       name:'account',

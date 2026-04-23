@@ -10,6 +10,17 @@
     },
     components: {
       RouterLink,
+    },
+    methods: {
+      getRoute(link) {
+        if(link.nameUrl){
+          return {
+            name : link.nameUrl,
+            params: link.params || {}
+          }
+        }
+        return null;
+      }
     }
   }
 </script>
@@ -18,7 +29,7 @@
   <section class="breadcrumb">
     <ul class="breadcrumb__list container flex">
       <li v-for="(link,index) in links" :key="link.name">
-        <RouterLink v-if="index !== links.length - 1" :to="{name:link.nameUrl}" class="breadcrumb__link">
+        <RouterLink v-if="index !== links.length - 1" :to="getRoute(link)" class="breadcrumb__link">
           {{link.name}}
         </RouterLink>
         <span v-else class="breadcrumb__link">

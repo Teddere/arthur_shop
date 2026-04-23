@@ -1,6 +1,6 @@
 <script setup>
   import axios from "axios";
-  import {ref,onMounted,watch} from 'vue';
+  import {ref,onMounted,watch,nextTick} from 'vue';
   import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
@@ -45,7 +45,7 @@
     { title: 'Couleurs', content: 'Noir,Blanc,Vert' }
   ];
 
-const getImageUrl = (url)=>{
+  const getImageUrl = (url)=>{
        if (!url) {
          return ''
        }else if(url.includes('media')) {
@@ -73,8 +73,10 @@ const getImageUrl = (url)=>{
         selectImage.value = response.data.get_image_default;
         selectColor.value = response.data.color[0].value ? response.data.color[0]:null;
         selectSize.value = response.data.size ? response.data.size[0].code:null;
+        links.value.push({'name':response.data.category.name,'nameUrl':'catalog_name','params':{'category_slug':response.data.category.name.toLocaleLowerCase()}});
         links.value.push({'name':response.data.title,'nameUrl':null})
         product.value = response.data;
+        document.title = `${product.value.title} | Arthur`;
       })
       .catch(err=>{
         console.log(err)
@@ -92,9 +94,17 @@ const getImageUrl = (url)=>{
       console.log(err)
     })
   }
+  // Fonction pour scroller page
+  const scrollToProduct = ()=>{
+    const prodSection = document.getElementById('detailProduction');
+    if (prodSection) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
   onMounted(()=>{
     getProduct()
     getProductAll()
+    document.title = 'Accueil | Arthur ';
   })
   watch(
     ()=> route.params.product_slug,
@@ -110,13 +120,14 @@ const getImageUrl = (url)=>{
       ];
       getProduct();
       getProductAll();
+      scrollToProduct();
     }
   );
 </script>
 <template>
   <Breadcrumb :links="links" />
   <!-- =========== DETAILS ============= -->
-  <section class="details section--lg">
+  <section id="detailProduction" class="details section--lg">
     <div class="details__container container grid">
       <div class="details___group">
         <img :src="getImageUrl(selectImage)" alt="product image" class="details__img" >

@@ -60,6 +60,7 @@ class ProductDetailSerializer(ProductSerializer):
             'title',
             'ref',
             'brand',
+            'category',
             'percent',
             'size',
             'stock',

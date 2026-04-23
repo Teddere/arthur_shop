@@ -1,5 +1,5 @@
 <script setup>
-  import {ref} from 'vue'
+  import {ref,onMounted,onUnmounted} from 'vue'
   import {RouterLink} from 'vue-router'
   import {useCartStore} from '@/stores/store.js';
   const showMenu = ref(false)
@@ -11,10 +11,20 @@
   }
 
   const cart = useCartStore()
+  const isScrolled = ref(false);
+  const handleScroll = ()=>{
+    isScrolled.value = window.scrollY >= 100;
+  }
+  onMounted(()=>{
+    window.addEventListener('scroll',handleScroll);
+  })
+  onUnmounted(()=>{
+    window.removeEventListener('scroll',handleScroll);
+  })
 </script>
 
 <template>
-  <section class="header-section">
+  <section class="header-section" :class="{'headerFixed': isScrolled}">
     <div class="header__top">
       <div class="header__container container">
         <div class="header__contact">
@@ -51,16 +61,19 @@
           <li class="nav__item"><a href="#" class="nav__link">Accessoires</a></li>
         </ul>
         <div class="header__search">
-          <input
+          <form method="get" action="/search">
+            <input
             type="text"
             class="form__input"
             id="search"
-            name="search"
+            name="query"
             placeholder="Recherche..."
           />
-          <button type="submit" class="search__btn">
+              <button type="submit" class="search__btn">
             <i class="fa-solid fa-search"></i>
           </button>
+          </form>
+
         </div>
       </div>
       <div class="header__user-actions">

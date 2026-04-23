@@ -39,9 +39,9 @@ const removeToast = (id)=>{
 <style scoped>
 .toast-container {
   position: fixed;
-  top: 20px;
+  bottom: 20px;
   right: 0;
-  z-index: 99;
+  z-index: 999;
   pointer-events: none;
 }
 .toast {
