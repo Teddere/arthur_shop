@@ -1,15 +1,20 @@
 <script setup>
   import axios from "axios";
-  import {ref,onMounted,watch,nextTick} from 'vue';
+  import {ref,onMounted,watch} from 'vue';
   import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
 
   const route = useRoute()
+  // navigation d'entête
   const links = ref([]);
+  // liste d'articles associés
   const productList = ref([]);
+  // article courante
   const product = ref({});
+  // navigation de menu
   const activeTab = ref('info');
+  // liste d'avis
   const reviews = ref([
     {
       author:'Marie Antoinette',
@@ -33,9 +38,13 @@
       image:'manteau-2.jpg'
     },
   ]);
+  // list d'images courantes
   const selectImage = ref(null);
+  // liste de couleurs courantes
   const selectColor = ref(null);
+  // liste de tailles courantes
   const selectSize = ref(null);
+  // informations articles
   const productInfo = [
     { title: 'Composition', content: 'Polyster 85%, Visco 10%, Elasthanne' },
     { title: 'Matière', content: 'Coton, Laine, Cuir, Polyester, Lin, etc.' },
@@ -73,9 +82,12 @@
         selectImage.value = response.data.get_image_default;
         selectColor.value = response.data.color[0].value ? response.data.color[0]:null;
         selectSize.value = response.data.size ? response.data.size[0].code:null;
+        // navigation Breadcrumb
         links.value.push({'name':response.data.category.name,'nameUrl':'catalog_name','params':{'category_slug':response.data.category.name.toLocaleLowerCase()}});
         links.value.push({'name':response.data.title,'nameUrl':null})
+        // product value
         product.value = response.data;
+        // page title
         document.title = `${product.value.title} | Arthur`;
       })
       .catch(err=>{

@@ -9,6 +9,7 @@ import CartView from "@/views/CartView.vue";
 import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import AccountView from "@/views/AccountView.vue";
+import SearchView from '@/views/SearchView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
       path:'/cart',
       name:'cart',
       component: CartView,
+    },
+    {
+      path:'/search',
+      name:'search',
+      component: SearchView
     },
     // category name catalog
     {

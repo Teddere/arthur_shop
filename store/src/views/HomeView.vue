@@ -14,8 +14,11 @@ import ShowaseItem from '@/components/ShowaseItem.vue'
 export default {
   data: () => {
     return {
+      // liste de toutes les catégories
       categoryItem: [],
+      // navigation active par défaut
       activeTab : 'new',
+      // liste de navigation d'articles
       tabs: [
         {
           id:'new',
@@ -33,7 +36,9 @@ export default {
           products: []
         }
       ],
+      // liste de derniers articles
       arrivals : [],
+      // liste de tous les showcases
       showcases : [
         {
           id:1,
@@ -72,7 +77,9 @@ export default {
           ]
       },
       ],
+      // date de promotion
       date: Date.now(),
+      // liste de promotion
       deals:[
         {
           id:1,
@@ -99,10 +106,12 @@ export default {
     }
   },
   computed: {
+    // selection de la navigation d'artiles
     getCurrentTabProducts(){
       const currentTab = this.tabs.find(tab => tab.id === this.activeTab);
       return currentTab ? currentTab.products:[];
     },
+    // mise à jour de temps de promotion
     dealWithCountdown(){
       return this.deals.map(deal =>({
         ...deal,
@@ -111,21 +120,29 @@ export default {
     }
   },
   mounted() {
+    // appel de toutes les catégories
     this.getCategoryAll()
+    // appel des articles de navigation
     this.getProductSelected()
+    // les derniers articles
     this.getProductLast()
+    //temps de promotion
     this.date = Date.now()
     this.timer = setInterval(()=>{
       this.date = Date.now()
     },1000);
+
+    // page title
+    document.title = 'Accueil | Arthur ';
   },
   beforeMount() {
+    // nettoyage du timer
     if(this.timer){
       clearInterval(this.timer)
     }
   },
   methods:{
-
+    // fonction de recupération des derniers articles
     getProductLast(){
       axios
         .get('/api/v1/last-products/')
@@ -137,6 +154,7 @@ export default {
           console.log(err)
         });
     },
+    // fonction de recupération des toutes les catégories
     getCategoryAll(){
       axios
         .get('/api/v1/categories/')
@@ -147,6 +165,7 @@ export default {
           console.log(err)
         })
     },
+    // fontion de recupération de la liste de navigation
     getProductSelected(){
       axios
         .get('/api/v1/products/selected/')
@@ -164,6 +183,7 @@ export default {
           console.log(err)
         })
     },
+    // fonction de calcul de temps promotionnel
     getTimeRemaining(endDate){
       const total = new Date(endDate).getTime() - this.date;
       if (total <=0 ){

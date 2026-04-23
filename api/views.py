@@ -7,13 +7,13 @@ from rest_framework.response import Response
 from .models import Product,Category,Badge
 from .serializers import ProductSerializer,ProductDetailSerializer,CategoryDetailSerializer
 
-
+# recupération de toutes les catégories
 class CategoryList(APIView):
     def get(self,request,format=None):
         categories = Category.objects.all()[:10]
         serializer = CategoryDetailSerializer(categories,many=True)
         return Response(serializer.data)
-
+# catégorie sélectionnée
 class CategoryListSelect(APIView):
     def get_object_select(self,category_slug):
         try:
@@ -26,7 +26,7 @@ class CategoryListSelect(APIView):
         product = self.get_object_select(category_slug)
         serializer = ProductSerializer(product,many=True)
         return Response(serializer.data)
-
+# catégorie associée au product
 class CategoryDetailSelect(APIView):
     def get_object_select(self,category_slug):
         try:
@@ -38,13 +38,13 @@ class CategoryDetailSelect(APIView):
         products = self.get_object_select(category_slug)
         serializer = ProductSerializer(products,many=True)
         return Response(serializer.data)
-
+# recupération de tous les products
 class ProductList(APIView):
     def get(self,request,format=None):
         products = Product.objects.all()
         serializer = ProductSerializer(products,many=True)
         return Response(serializer.data)
-
+# recupération de article de navigation (home page)
 class ProductListSelect(APIView):
     def get_object_select(self,badge):
         try:
@@ -64,13 +64,13 @@ class ProductListSelect(APIView):
             {'name':'edit','products':ProductSerializer(editProducts,many=True).data}
         ]
         return Response(data)
-
+# recupépation des derniers articles
 class LastProductsList(APIView):
     def get(self,request,format=None):
         products = Product.objects.all()[:8]
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
-
+# recupération d'article détaillé 
 class ProductDetail(APIView):
     def get_object(self,category_slug,product_slug):
         try:
@@ -83,12 +83,12 @@ class ProductDetail(APIView):
         product = self.get_object(category_slug,product_slug)
         serializer = ProductDetailSerializer(product)
         return Response(serializer.data)
-
+# recherche de product(s)
 @api_view(['POST'])
 def search(request):
     query = request.data.get("query",'')
     if query:
-        products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        products = Product.objects.filter(Q(title__icontains=query) | Q(description__icontains=query))
         serializer = ProductSerializer(products,many=True)
         return Response(serializer.data)
     else:

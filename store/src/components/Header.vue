@@ -2,6 +2,8 @@
   import {ref,onMounted,onUnmounted} from 'vue'
   import {RouterLink} from 'vue-router'
   import {useCartStore} from '@/stores/store.js';
+
+
   const showMenu = ref(false)
   const openMenu = ()=>{
     showMenu.value = true;

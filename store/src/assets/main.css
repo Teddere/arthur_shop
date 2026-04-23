@@ -279,6 +279,9 @@
 .products__container {
    grid-template-columns: 100%;
  }
+ .products__header {
+  padding: 1rem 0;
+ }
 .product__item {
   border: 1px solid var(--border-color);
   border-radius: 1.5rem;

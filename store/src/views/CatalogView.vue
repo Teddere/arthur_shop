@@ -9,10 +9,13 @@ import { useRoute, useRouter } from "vue-router";
 const API = useApi();
 const route = useRoute();
 const router = useRouter();
+// liste des articles
 const products = ref([]);
+// page courante
 const currentPage = ref(1);
+// notre des items sur une page
 const itemPerPage = ref(12);
-
+// navigation d'entête
 const linkNavigatePage = [
   { 'name': 'Accueil', 'nameUrl': 'home' },
   { 'name': 'Catalogue', 'nameUrl': 'catalog' }
@@ -59,7 +62,7 @@ const scrollToProducts = () => {
     prodSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
-
+// recupération de tous les articles
 const getProductAll = async()=>{
   try {
     products.value = await API.get('/api/v1/products/all/',5000,800);
@@ -70,6 +73,7 @@ const getProductAll = async()=>{
 }
 // Montage du composant
 onMounted(() => {
+  // appel de tous les articles
   getProductAll()
   // Initialiser la page depuis l'URL
   const pageFromUrl = parseInt(route.query.page);
@@ -84,6 +88,8 @@ onMounted(() => {
     // Pas de page dans l'URL, définir par défaut à 1
     currentPage.value = 1;
   }
+  // page title
+  document.title = 'Catalogue | Arthur'
 });
 
 // Surveiller les changements de route (navigation par boutons navigateur)

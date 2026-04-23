@@ -55,7 +55,8 @@
       .get(`api/v1/catalog/${category_slug}`)
       .then(response=>{
         console.log(response.data)
-        products.value = response.data
+        products.value = response.data;
+        document.title = `${category_slug.toLocaleLowerCase()} | Arthur`
       })
       .catch(err=>{
         console.log(err)
@@ -76,6 +77,7 @@
       // Pas de page dans l'URL, définir par défaut à 1
       currentPage.value = 1
     }
+
   });
   // Surveiller les changements de route (navigation par boutons navigateur)
   watch(()=>route.query.page,(newPage)=>{
