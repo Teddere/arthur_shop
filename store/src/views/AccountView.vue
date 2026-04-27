@@ -33,34 +33,38 @@
           <h3 class="tab__header">Vos Commandes</h3>
           <div class="tab__body">
             <table class="placed__order-table">
-              <tr>
-                <th>Commande</th>
-                <th>Date</th>
-                <th>Statut</th>
-                <th>Total</th>
-                <th>Actions</th>
-              </tr>
-              <tr>
-                <td>#1357</td>
-                <td>22 mars 2026</td>
-                <td>En attente</td>
-                <td>300.00 €</td>
-                <td><a href="#" class="view__order">Aperçu</a></td>
-              </tr>
-              <tr>
-                <td>#13258</td>
-                <td>21 février 2026</td>
-                <td>Validé</td>
-                <td>300.00 €</td>
-                <td><a href="#" class="view__order">Aperçu</a></td>
-              </tr>
-              <tr>
-                <td>#13258</td>
-                <td>21 février 2026</td>
-                <td>Completé</td>
-                <td>150.00 €</td>
-                <td><a href="#" class="view__order">Aperçu</a></td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>Commande</th>
+                  <th>Date</th>
+                  <th>Statut</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1357</td>
+                  <td>22 mars 2026</td>
+                  <td>En attente</td>
+                  <td>300.00 €</td>
+                  <td><a href="#" class="view__order">Aperçu</a></td>
+                </tr>
+                <tr>
+                  <td>#13258</td>
+                  <td>21 février 2026</td>
+                  <td>Validé</td>
+                  <td>300.00 €</td>
+                  <td><a href="#" class="view__order">Aperçu</a></td>
+                </tr>
+                <tr>
+                  <td>#13258</td>
+                  <td>21 février 2026</td>
+                  <td>Completé</td>
+                  <td>150.00 €</td>
+                  <td><a href="#" class="view__order">Aperçu</a></td>
+                </tr>
+                </tbody>
             </table>
           </div>
         </div>

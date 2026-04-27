@@ -35,8 +35,8 @@
         </div>
         <p class="header__alert-news">30% de remise pour 150 € d'achats</p>
         <div class="header__top-nav">
-          <a href="#" class="header__top-action">Créer</a>
-          <a href="#" class="header__top-action">Connexion</a>
+          <RouterLink :to="{name:'register'}" class="header__top-action">Créer</RouterLink>
+          <RouterLink :to="{name:'login'}" class="header__top-action">Connexion</RouterLink>
         </div>
       </div>
     </div>
@@ -58,7 +58,9 @@
           <li class="nav__item">
             <RouterLink :to="{name:'catalog'}" class="nav__link">Catalogues</RouterLink>
           </li>
-          <li class="nav__item"><a href="#" class="nav__link">Vêtements</a></li>
+          <li class="nav__item">
+            <RouterLink :to="{name:'catalog_name',params:{'category_slug':'manteaux'}}" class="nav__link">Vêtements</RouterLink>
+          </li>
           <li class="nav__item"><a href="#" class="nav__link">Chaussures</a></li>
           <li class="nav__item"><a href="#" class="nav__link">Accessoires</a></li>
         </ul>
@@ -83,9 +85,9 @@
           <i class="fa-solid fa-cart-shopping"></i>
           <span class="count">{{cart.itemCount}}</span>
         </RouterLink>
-        <a href="#" class="header__action-btn user-link">
+        <RouterLink :to="{name:'login'}" class="header__action-btn user-link">
           <i class="fa-solid fa-user"></i>
-        </a>
+        </RouterLink>
         <button @click="openMenu" type="button" class="header__action-btn btn-toggle">
           <i class="fa-solid fa-bars"></i>
         </button>

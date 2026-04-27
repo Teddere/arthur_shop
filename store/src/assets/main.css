@@ -230,6 +230,7 @@
   border: 1px solid var(--border-color);
   border-radius: 1.25rem;
   padding: 1rem;
+  margin-bottom: 0.5rem;
 }
 .category__img {
   border-radius: .75rem;
@@ -1094,6 +1095,16 @@
 }
 .login-register__container .btn {
   width: 100%;
+}
+.form__notification {
+  color: #58151C;
+  background: #f8d7da;
+  border: 1px solid #f1aeb5;
+
+}
+.form__notification  li {
+  margin: 0.2rem 0;
+  list-style-type: disc;
 }
 /* =============== CART ============================= */
 .table__container {
