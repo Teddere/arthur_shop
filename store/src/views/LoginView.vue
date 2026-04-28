@@ -48,6 +48,8 @@
         auth.setToken(token);
         axios.defaults.headers.common['Authorization'] = `Token ${auth.token}`;
         localStorage.setItem('token',token);
+        localStorage.setItem('username','username')
+        localStorage.setItem('userId',0)
 
         const toPath = router.query.to || '/account';
         router.push(toPath);

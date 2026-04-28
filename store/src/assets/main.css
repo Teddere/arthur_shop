@@ -40,6 +40,7 @@
 .header__top-action {
   color: var(--text-color);
   font-weight: var(--weight-600);
+  cursor: pointer;
 }
 .header__top-action:first-child::after {
   content: '/';
@@ -1352,6 +1353,67 @@
 .edit {
    font-size: var(--small-font-size);
 }
+/* =================== CHECKOUT =================== */
+.checkout__container {
+  grid-template-columns: 1fr;
+}
+.checkout__group:nth-child(2) {
+  border: 1px solid var(--border-color-alt);
+  padding: 1.25rem;
+  border-radius: .5rem;
+}
+.checkout__group .section__title {
+  font-size: var(--large-font-size);
+}
+.checkout__group .checkout__title {
+  font-size: var(--small-font-size);
+}
+.checkout__title {
+  margin-bottom: 1rem;
+}
+.order__table tr th {
+  display: none;
+  color: var(--title-color);
+  font-size: var(--small-font-size);
+}
+.order__table tr th,
+.order__table tr td {
+  border: 1px solid var(--border-color-alt);
+  padding: .5rem;
+  text-align: center;
+}
+.order__table tr td {
+  display: block;
+}
+.order__img {
+  width: 70px;
+  background-color: var(--light-color);
+  object-fit: contain;
+  object-position: center ;
+}
+.table__quantity,
+.order__subtitle {
+  font-size: var(--small-font-size);
+}
+.table__grand-total {
+  color: var(--primary-color);
+  font-size: var(--large-font-size);
+  font-weight: var(--weight-700);
+}
+
+.payment__methods {
+  margin-block: 2.25rem 2.25rem;
+}
+.payment__option {
+  margin-bottom: 1rem;
+}
+.payment_input {
+  accent-color: var(--primary-color);
+}
+.payment_label {
+  font-size: var(--small-font-size);
+  cursor: pointer;
+}
 /* For small devices  */
 @media screen and (min-width: 350px){
   /*============ CATEGORIES =======================*/
@@ -1395,12 +1457,14 @@
     column-gap: 1.5rem;
   }
   /*-- ============= LOGIN & REGISTER ============== --*/
-  .login-register {
+  .login-register,
+  .success-container {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-  .login-register__container {
+  .login-register__container,
+  .success__content {
     grid-template-columns: max(500px);
   }
   /* =============== CART ============================= */
@@ -1414,6 +1478,16 @@
   }
   .placed__order-table tr td {
     display: table-cell;
+  }
+  /* =================== CHECKOUT =================== */
+  .checkout__group:nth-child(2) {
+    padding: 1.5rem;
+  }
+  .order__table tr td {
+    display: table-cell;
+  }
+  .payment__methods {
+    margin-block: 2.5rem 2.75rem;
   }
 }
 /* For medium devices */
@@ -1540,6 +1614,10 @@
   .accounts__container {
     grid-template-columns: 3fr 9fr;
   }
+  /* =================== CHECKOUT =================== */
+  .checkout__container {
+    grid-template-columns: repeat(2,1fr);
+  }
 }
 /* For large devices */
 @media  screen and (min-width:1200px){
@@ -1628,6 +1706,10 @@
   /* =================== ACCOUNT =================== */
   .account__tab {
     padding: 1rem 2rem;
+  }
+  /* =================== CHECKOUT =================== */
+  .checkout__group:nth-child(2) {
+    padding: 2rem;
   }
 }
 @media  screen and (min-width:1400px) {

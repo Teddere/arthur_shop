@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import {useLoadingStore} from "@/stores/store.js";
+import { useAuthenticate } from '@/stores/store.js';
 
 import HomeView from '@/views/HomeView.vue'
 import CatalogView from '@/views/CatalogView.vue';
@@ -10,6 +11,9 @@ import LoginView from '@/views/LoginView.vue';
 import RegisterView from '@/views/RegisterView.vue';
 import AccountView from "@/views/AccountView.vue";
 import SearchView from '@/views/SearchView.vue';
+import Checkout from '@/views/Checkout.vue';
+import Success from '@/views/Success.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,7 +69,27 @@ const router = createRouter({
     {
       path:'/account',
       name:'account',
-      component:AccountView
+      component:AccountView,
+      meta : {
+        requireLogin: true
+      }
+    },
+    // checkout page
+    {
+      path:'/cart/checkout',
+      name:'checkout',
+      component: Checkout,
+      /*meta : {
+        requireLogin: true
+      }*/
+    },
+    {
+      path:'/cart/success',
+      name:'success',
+      component: Success,
+      /*meta : {
+        requireLogin: true
+      }*/
     },
     {
       path: '/about',
@@ -79,9 +103,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to,from,next)=>{
+
   const loading = useLoadingStore();
+  const auth = useAuthenticate();
   loading.isLoading = true;
-  next();
+
+  if (to.matched.some(record => record.meta.requireLogin) && !auth.isAuthenticated) {
+    next({name:'login',query: {to: to.path}})
+  } else {
+    next();
+  }
+
+
 })
 
 router.afterEach(()=>{

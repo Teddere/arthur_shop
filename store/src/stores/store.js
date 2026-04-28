@@ -25,8 +25,10 @@ export const useAuthenticate = defineStore('auth',()=>{
     token.value = null;
     isAuthenticated.value = false;
    }
+
   return {
     // Getters
+    isAuthenticated,
     token,
     // Action
     setToken,

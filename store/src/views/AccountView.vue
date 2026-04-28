@@ -1,14 +1,39 @@
 <script setup>
   import {ref} from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useAuthenticate } from '@/stores/store';
   import SideBar from "@/components/SideBar.vue";
   import Breadcrumb from "@/components/Breadcrumb.vue";
+  import axios from 'axios';
 
+
+  const router = useRoute();
+  const auth = useAuthenticate();
   const linkNavigatePage = ref([]);
   linkNavigatePage.value = [
     { 'name': 'Accueil', 'nameUrl': 'home' },
     { 'name': 'Catalogue', 'nameUrl': 'catalog'},
     { 'name': 'Compte', 'nameUrl': 'catalog' }
   ]
+  const activeTab = ref(0);
+
+  const handleTabChange = (tabId)=> {
+    // logout
+    if (tabId === 4) {
+        axios.defaults.headers.common['Authorization'] = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userId');
+
+        auth.removeToken();
+
+        router.push('/')
+    }
+    else {
+      activeTab.value = tabId
+    }
+
+  }
 
 </script>
 
@@ -17,9 +42,9 @@
   <!-- =================== ACCOUNT =================== -->
   <section class="accounts section--lg">
     <div class="accounts__container container grid">
-      <SideBar></SideBar>
+      <SideBar :active-tab="activeTab" @tab_change="handleTabChange"></SideBar>
       <div class="tabs__content">
-        <div class="tab__content active-tab">
+        <div class="tab__content" :class="{'active-tab': activeTab===0}">
           <h3 class="tab__header">Bonjour Antoine !</h3>
           <div class="tab__body">
             <p class="tab__description">
@@ -29,7 +54,7 @@
             </p>
           </div>
         </div>
-        <div class="tab__content">
+        <div class="tab__content" :class="{'active-tab': activeTab===1}">
           <h3 class="tab__header">Vos Commandes</h3>
           <div class="tab__body">
             <table class="placed__order-table">
@@ -68,7 +93,7 @@
             </table>
           </div>
         </div>
-        <div class="tab__content">
+        <div class="tab__content" :class="{'active-tab': activeTab===2}">
           <h3 class="tab__header">Profile</h3>
           <div class="tab__body">
             <form action="" class="form grid">
@@ -82,7 +107,7 @@
             </form>
           </div>
         </div>
-        <div class="tab__content">
+        <div class="tab__content" :class="{'active-tab': activeTab===3}">
           <h3 class="tab__header">Adresse de livraison</h3>
           <div class="tab__body">
             <address class="adress">

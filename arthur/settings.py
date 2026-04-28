@@ -16,6 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STRIPE_SECKEY_KEY='sk_test_51RyWD0AWrftINUc7wXhP0Xz00W84kdJT3DhvtwsziNjqZXp4vc0cpzRMRRbZLTe9Qc9YJzQrFzW54QiiL33aXr8D00j2Vl6spn' #key stripe prive
 
 # Application definition
 
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'api',
+    'order',
 ]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',

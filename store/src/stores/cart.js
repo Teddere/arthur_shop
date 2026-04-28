@@ -108,7 +108,7 @@ export const useCartStore=defineStore('cart',()=>{
   }
 
   // clearn cart
-  const clearnCart =()=>{
+  const clearCart =()=>{
     items.value = [];
     localStorage.removeItem('cart');
   }
@@ -125,6 +125,6 @@ export const useCartStore=defineStore('cart',()=>{
     updateDownProduct,
     editProduct,
     removeCart,
-    clearnCart
+    clearCart
   }
 })

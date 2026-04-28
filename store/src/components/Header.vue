@@ -1,7 +1,9 @@
 <script setup>
   import {ref,onMounted,onUnmounted} from 'vue'
-  import {RouterLink} from 'vue-router'
+  import {RouterLink,useRoute} from 'vue-router'
   import {useCartStore} from '@/stores/cart.js';
+  import { useAuthenticate } from '@/stores/store';
+  import axios from 'axios';
 
 
   const showMenu = ref(false)
@@ -11,7 +13,8 @@
   const closeMenu = ()=>{
     showMenu.value = false;
   }
-
+  const router = useRoute();
+  const auth = useAuthenticate();
   const cart = useCartStore()
   const isScrolled = ref(false);
   const handleScroll = ()=>{
@@ -23,6 +26,18 @@
   onUnmounted(()=>{
     window.removeEventListener('scroll',handleScroll);
   })
+
+  const logout = ()=>{
+      axios.defaults.headers.common['Authorization'] = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('userId');
+      auth.removeToken();
+
+      if(router.name === 'account') {
+        router.push('/')
+      }
+  }
 </script>
 
 <template>
@@ -34,9 +49,12 @@
           <!--<span>15 rue du louvre, 75001 Paris</span>-->
         </div>
         <p class="header__alert-news">30% de remise pour 150 € d'achats</p>
-        <div class="header__top-nav">
+        <div class="header__top-nav" v-if="!auth.isAuthenticated">
           <RouterLink :to="{name:'register'}" class="header__top-action">Créer</RouterLink>
           <RouterLink :to="{name:'login'}" class="header__top-action">Connexion</RouterLink>
+        </div>
+        <div class="header__top-nav" v-else>
+          <button @click="logout" type="button" class="header__top-action">Déconnexion</button>
         </div>
       </div>
     </div>
@@ -63,6 +81,9 @@
           </li>
           <li class="nav__item"><a href="#" class="nav__link">Chaussures</a></li>
           <li class="nav__item"><a href="#" class="nav__link">Accessoires</a></li>
+          <template v-if="auth.isAuthenticated">
+            <RouterLink :to="{name:'account'}">Dashboard</RouterLink>
+          </template>
         </ul>
         <div class="header__search">
           <form method="get" action="/search">
