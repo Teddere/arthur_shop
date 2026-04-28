@@ -1,18 +1,19 @@
 <script setup>
-import {useToastStore} from "@/stores/store.js";
-const toastStore = useToastStore();
-const getIcon = (type)=> {
-  const icons = {
-    success: 'fa-circle-check',
-    error: 'fa-circle-xmark',
-    warning: 'fa-triangle-exclamation',
-    info: 'fa-circle-info',
+  import {useToastStore} from "@/stores/toast.js";
+
+  const toastStore = useToastStore();
+  const getIcon = (type)=> {
+    const icons = {
+      success: 'fa-circle-check',
+      error: 'fa-circle-xmark',
+      warning: 'fa-triangle-exclamation',
+      info: 'fa-circle-info',
+    }
+    return icons[type] || icons.info;
   }
-  return icons[type] || icons.info;
-}
-const removeToast = (id)=>{
-  toastStore.removeToast(id)
-}
+  const removeToast = (id)=>{
+    toastStore.removeToast(id)
+  }
 </script>
 
 <template>

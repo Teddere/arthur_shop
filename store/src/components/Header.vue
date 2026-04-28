@@ -1,7 +1,7 @@
 <script setup>
   import {ref,onMounted,onUnmounted} from 'vue'
   import {RouterLink} from 'vue-router'
-  import {useCartStore} from '@/stores/store.js';
+  import {useCartStore} from '@/stores/cart.js';
 
 
   const showMenu = ref(false)

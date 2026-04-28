@@ -1,7 +1,7 @@
 <script setup>
   import {ref,computed,onMounted} from 'vue';
   import Breadcrumb from "@/components/Breadcrumb.vue";
-  import {useCartStore} from "@/stores/store.js";
+  import {useCartStore} from "@/stores/cart.js";
 
   const linkNavigatePage =ref([]);
   const updateTimers = ref({})

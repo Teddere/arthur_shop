@@ -1,7 +1,7 @@
 <script setup>
   import {RouterLink} from "vue-router";
-  import { useToastStore } from "@/stores/store.js";
-  import {useCartStore} from "@/stores/store.js";
+  import { useToastStore } from "@/stores/toast.js";
+  import {useCartStore} from "@/stores/cart.js";
 
   const props = defineProps({
     product : {
