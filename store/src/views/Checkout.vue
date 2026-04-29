@@ -5,7 +5,7 @@
   import Breadcrumb from '@/components/Breadcrumb.vue';
   import axios from 'axios';
 
-
+  const stripe_secret = import.meta.env.VITE_STRIPE_SECRET_KEY_PUBLIC;
   const linkNavigatePage = [
   { 'name': 'Accueil', 'nameUrl': 'home' },
   { 'name': 'Catalogue', 'nameUrl': 'catalog' },
@@ -27,7 +27,8 @@
   onMounted(()=>{
     document.title ='Checkout | Arthur'
     if(cart.isInCart) {
-      stripe.value = Stripe('pk_test_51RyWD0AWrftINUc7ko1JK6BS5ERcWn372YkFNI5j54hS9IscRaPuaLgxCsubmZeawkFqvSkv66wFqG3DErXnc2ps001nq9TJho'); // key stripe : publique
+      // eslint-disable-next-line no-undef
+      stripe.value = Stripe(stripe_secret);
       const elements = stripe.value.elements();
       card.value = elements.create('card',{hidePostalCode:true})
 
