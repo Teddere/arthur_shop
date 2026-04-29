@@ -4,3 +4,4 @@ categories
 products
 store/src/assets/images/
 __pycache__
+.env
