@@ -27,7 +27,7 @@
   onMounted(()=>{
     document.title ='Checkout | Arthur'
     if(cart.isInCart) {
-      // eslint-disable-next-line no-undef
+
       stripe.value = Stripe(stripe_secret);
       const elements = stripe.value.elements();
       card.value = elements.create('card',{hidePostalCode:true})
