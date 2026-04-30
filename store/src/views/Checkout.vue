@@ -1,6 +1,6 @@
 <script setup>
   import { ref, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { useRouter } from 'vue-router';
   import { useCartStore } from '@/stores/cart';
   import Breadcrumb from '@/components/Breadcrumb.vue';
   import axios from 'axios';
@@ -11,7 +11,7 @@
   { 'name': 'Catalogue', 'nameUrl': 'catalog' },
   { 'name': 'Panier', 'nameUrl':'cart'}
   ];
-  const router = useRoute();
+  const router = useRouter();
   const cart = useCartStore();
   const payment = ref(null);
   const stripe = ref({})
@@ -91,8 +91,8 @@
       const item = cart.items[i]
       const obj = {
         product : item.id,
-        quantity: item.quantity,
-        price: item.price
+        quantity: parseInt(item.quantity),
+        price: parseFloat(item.price)
       }
 
       items.push(obj)
@@ -100,11 +100,11 @@
     }
 
     const dataForm = {
-          'firstName': firstName.value,
-          'lastName': lastName.value,
+          'first_name': firstName.value,
+          'last_name': lastName.value,
           'email': email.value,
           'phone': phone.value,
-          'payment': payment.value,
+          //'payment': payment.value,
           // optional
           'address': address.value,
           'comment': comment.value,
@@ -119,8 +119,9 @@
         console.log(response.data)
       })
       .catch(error=>{
+
         errors.value.push('Une erreur s\'est produite, veuillez réessayer')
-        console.log(error)
+        console.log(error.response.data)
       })
   }
 </script>

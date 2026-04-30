@@ -1,5 +1,6 @@
 <script setup>
   import {ref,computed,onMounted} from 'vue';
+  import {RouterLink} from "vue-router";
   import Breadcrumb from "@/components/Breadcrumb.vue";
   import {useCartStore} from "@/stores/cart.js";
 
@@ -119,10 +120,10 @@
               </tr>
             </tbody>
           </table>
-          <button type="button" class="btn btn-md flex">
+          <RouterLink :to="{name:'checkout'}" class="btn btn-md flex">
             <i class="fa-solid fa-box"></i>
             Validé
-          </button>
+          </RouterLink>
         </div>
     </div>
   </section>

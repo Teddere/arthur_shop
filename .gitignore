@@ -5,3 +5,4 @@ products
 store/src/assets/images/
 __pycache__
 .env
+test_users.txt

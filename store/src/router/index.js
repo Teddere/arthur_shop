@@ -79,17 +79,17 @@ const router = createRouter({
       path:'/cart/checkout',
       name:'checkout',
       component: Checkout,
-      /*meta : {
+      meta : {
         requireLogin: true
-      }*/
+      }
     },
     {
       path:'/cart/success',
       name:'success',
       component: Success,
-      /*meta : {
+      meta : {
         requireLogin: true
-      }*/
+      }
     },
     {
       path: '/about',

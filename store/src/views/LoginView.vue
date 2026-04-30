@@ -1,6 +1,6 @@
 <script setup>
   import {ref,onMounted} from 'vue';
-  import { RouterLink,useRouter } from 'vue-router';
+  import { RouterLink,useRoute,useRouter } from 'vue-router';
   import { useAuthenticate } from '@/stores/store';
   import Breadcrumb from '@/components/Breadcrumb.vue';
 
@@ -14,6 +14,7 @@
     {'name':'Connexion', 'nameUrl':'login'}
   ];
   const auth = useAuthenticate();
+  const route = useRoute();
   const router = useRouter();
   const errors = ref([]);
   const email = ref('');
@@ -42,27 +43,25 @@
       auth.removeToken();
 
       await axios
-      .post('/api/V1/login',dataForm)
+      .post('/api/v1/token/login/',dataForm)
       .then(response=> {
-        const token = response.data.authToken;
+        const token = response.data.auth_token;
         auth.setToken(token);
         axios.defaults.headers.common['Authorization'] = `Token ${auth.token}`;
         localStorage.setItem('token',token);
-        localStorage.setItem('username','username')
-        localStorage.setItem('userId',0)
 
-        const toPath = router.query.to || '/account';
+       const toPath = route.query.to || '/account';
         router.push(toPath);
 
       })
-      .catch(error=>{
-        if (error.response) {
-          for(const property in error.response.data) {
-            errors.value.push(`${property} : ${error.response.data[property]}`)
+      .catch(err=>{
+        if (err.response) {
+          for(const property in err.response.data) {
+            errors.value.push(`${err.response.data[property]}`)
           }
         } else {
-          errors.value.push('Erreur s\'est productée, veuillez réessayer !')
-          console.log(JSON.stringify(error))
+          errors.value.push('Erreur s\'est produite, veuillez réessayer !')
+          console.log(JSON.stringify(err))
         }
       })
     }
@@ -85,6 +84,11 @@
             </button>
           </div>
         </form>
+        <div class="form__notification" v-if="errors.length">
+          <ul v-for="err in errors" :key="err">
+            <li>{{ err }}</li>
+          </ul>
+        </div>
       </div>
       <p>Vous ne possèdez pas de compte, créer un <RouterLink :to="{name:'register'}">nouveau</RouterLink> compte</p>
     </div>

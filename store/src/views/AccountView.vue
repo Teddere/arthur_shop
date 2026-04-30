@@ -1,13 +1,13 @@
 <script setup>
-  import {ref} from 'vue';
-  import { useRoute } from 'vue-router';
+  import {ref,onMounted} from 'vue';
+  import { useRouter } from 'vue-router';
   import { useAuthenticate } from '@/stores/store';
   import SideBar from "@/components/SideBar.vue";
   import Breadcrumb from "@/components/Breadcrumb.vue";
   import axios from 'axios';
 
 
-  const router = useRoute();
+  const router = useRouter();
   const auth = useAuthenticate();
   const linkNavigatePage = ref([]);
   linkNavigatePage.value = [
@@ -16,7 +16,12 @@
     { 'name': 'Compte', 'nameUrl': 'catalog' }
   ]
   const activeTab = ref(0);
+  const orders = ref([]);
 
+  onMounted(()=>{
+    document.title = 'Account | Arthur';
+    getMyOrders()
+  })
   const handleTabChange = (tabId)=> {
     // logout
     if (tabId === 4) {
@@ -34,7 +39,16 @@
     }
 
   }
-
+  const getMyOrders = async ()=>{
+    // chargement
+    await axios.get('/api/v1/orders/')
+      .then(response=>{
+        orders.value = response.data
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+  }
 </script>
 
 <template>
@@ -56,7 +70,7 @@
         </div>
         <div class="tab__content" :class="{'active-tab': activeTab===1}">
           <h3 class="tab__header">Vos Commandes</h3>
-          <div class="tab__body">
+          <div class="tab__body" v-if="orders">
             <table class="placed__order-table">
               <thead>
                 <tr>
@@ -68,7 +82,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+
+                <tr v-for="order in orders" :key="order.id">
                   <td>#1357</td>
                   <td>22 mars 2026</td>
                   <td>En attente</td>
@@ -91,6 +106,11 @@
                 </tr>
                 </tbody>
             </table>
+          </div>
+          <div class="tab__body" v-else>
+            <p class="tab__description">
+              Retrouvez toutes vos commandes ici
+            </p>
           </div>
         </div>
         <div class="tab__content" :class="{'active-tab': activeTab===2}">

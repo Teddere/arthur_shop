@@ -1101,7 +1101,7 @@
   color: #58151C;
   background: #f8d7da;
   border: 1px solid #f1aeb5;
-
+  margin: 0.5rem 0;
 }
 .form__notification  li {
   margin: 0.2rem 0;

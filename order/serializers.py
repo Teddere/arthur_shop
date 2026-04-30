@@ -2,13 +2,38 @@ from rest_framework import serializers
 from .models import Order,OrderItem
 from api.serializers import ProductSerializer
 
-class OrderItemSerializer(serializers.ModelSerializer):
+class MyOrderItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
     class Meta:
         model = OrderItem
         fields = (
             'price',
             'product',
             'quantity'
+        )
+class MyOrderSerializer(serializers.ModelSerializer):
+    items = MyOrderItemSerializer(many=True)
+    class Meta:
+        model=Order
+        fields = (
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'address',
+            'comment',
+            'stripe_token',
+            'items',
+            'paid_amount',
+        )
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = (
+            'price',
+            'product',
+            'quantity',
         )
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -23,7 +48,7 @@ class OrderSerializer(serializers.ModelSerializer):
             'phone',
             'address',
             'comment',
-            'stripe_token'
+            'stripe_token',
             'items'
         )
     def create(self,validated_data):

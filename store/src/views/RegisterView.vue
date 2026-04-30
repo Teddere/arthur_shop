@@ -42,19 +42,28 @@
     }
     else {
       const dataForm = {
-        username : username.value,
+        username: username.value,
         email: email.value,
-        password: password2.value,
+        password: password.value,
+        re_password: password2.value,
       }
       axios
-      .post('/api/V1/users',dataForm)
+      .post('/api/v1/users/',dataForm)
       .then(response=> {
-        console.log(response.data)
-        toast.success(`Le compte utilisateur ${username.value.toUpperCase()} crée avec succès !`,3000);
+        toast.success(`Le compte utilisateur ${response.data.username} crée avec succès !`,3000);
         setTimeout(
           router.push('/login'),3000)
+        })
+      .catch(err=>{
+        if (err.response) {
+          for (const property in err.response.data) {
+            errors.value.push(`${err.response.data[property]}`)
+          }
+        } else if (err.message) {
+            errors.value.push('Une erreur s\'est produite. Veuillez réessayer');
+            console.log(JSON.stringify(err))
+        }
       })
-      .catch(err=>console.log(err))
     }
 
   }

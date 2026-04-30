@@ -1,6 +1,6 @@
 <script setup>
   import {ref,onMounted,onUnmounted} from 'vue'
-  import {RouterLink,useRoute} from 'vue-router'
+  import {RouterLink, useRouter,useRoute} from 'vue-router'
   import {useCartStore} from '@/stores/cart.js';
   import { useAuthenticate } from '@/stores/store';
   import axios from 'axios';
@@ -13,7 +13,8 @@
   const closeMenu = ()=>{
     showMenu.value = false;
   }
-  const router = useRoute();
+  const router = useRouter();
+  const route = useRoute();
   const auth = useAuthenticate();
   const cart = useCartStore()
   const isScrolled = ref(false);
@@ -34,7 +35,7 @@
       localStorage.removeItem('userId');
       auth.removeToken();
 
-      if(router.name === 'account') {
+      if(route.name === 'account') {
         router.push('/')
       }
   }
