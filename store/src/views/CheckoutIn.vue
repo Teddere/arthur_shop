@@ -13,7 +13,7 @@
   ];
   const router = useRouter();
   const cart = useCartStore();
-  const payment = ref(null);
+  //const payment = ref(null);
   const stripe = ref({})
   const card = ref({})
   const firstName = ref(null);
@@ -23,14 +23,33 @@
   const address = ref(null);
   const comment = ref(null)
   const errors = ref([]);
+  const stripStyle = {
+     style: {
+      base: {
+        color: '#1a1a1a',
+        fontFamily: '"Inter", system-ui, sans-serif',
+        fontSize: '16px',
+        '::placeholder': {
+          color: '#9ca3af'
+        }
+      },
+      invalid: {
+        color: '#dc2626'
+      } ,
+      complete: {
+        color: '#10b981'
+      }
+  }
 
+  }
   onMounted(()=>{
     document.title ='Checkout | Arthur'
     if(cart.isInCart) {
 
+      // eslint-disable-next-line no-undef
       stripe.value = Stripe(stripe_secret);
       const elements = stripe.value.elements();
-      card.value = elements.create('card',{hidePostalCode:true})
+      card.value = elements.create('card',{hidePostalCode:true,style:stripStyle.style})
 
       card.value.mount('#card-element')
     }
@@ -178,25 +197,14 @@
             </tr>
           </tbody>
         </table>
-        <div class="payment__methods">
-          <h3 class="checkout__title">Mode de paiment</h3>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="creditCard" id="payement_1" checked class="payment_input">
-            <label for="payement_1" class="payment_label">Par Carte</label>
-          </div>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="strip"  id="payement_2"  class="payment_input">
-            <label for="payement_2" class="payment_label">Par Stripe</label>
-          </div>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="paypal" id="payement_3"  class="payment_input">
-            <label for="payement_3" class="payment_label">Par Paypal</label>
-          </div>
+        <div id="card-element" class="payment__methods">
+
 
         </div>
         <button @click="submitForm" type="button" class="btn btn-md">Confirmer</button>
       </div>
-      <div id="card-element"></div>
+
     </div>
   </section>
 </template>
+

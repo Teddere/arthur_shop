@@ -1402,7 +1402,13 @@
 }
 
 .payment__methods {
-  margin-block: 2.25rem 2.25rem;
+    margin-block: 2.25rem 2.25rem;
+    background-color: transparent;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
 }
 .payment__option {
   margin-bottom: 1rem;
