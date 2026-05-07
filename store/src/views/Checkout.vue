@@ -13,7 +13,6 @@
   ];
   const router = useRouter();
   const cart = useCartStore();
-  const payment = ref(null);
   const stripe = ref({})
   const card = ref({})
   const firstName = ref(null);
@@ -24,16 +23,47 @@
   const comment = ref(null)
   const errors = ref([]);
 
+  const style = {
+    base: {
+      color:'#475C53',
+      fontFamily: "'lato', sans-serif",
+      fontSize: '0.875rem',
+      letterSpacing: '0.02em',
+      '::placeholder': {
+        color: '#9ca3af',
+        letterSpacing: '0.05em',
+      },
+      ':focus': {
+        color: '#4E31CE',
+      },
+    },
+    invalid: {
+      color: '#E24B4A',
+      iconColor: '#E24B4A',
+   },
+    complete: {
+      color: '#0F6E56',
+      iconColor: '#0F6E56',
+    },
+  }
   onMounted(()=>{
     document.title ='Checkout | Arthur'
     if(cart.isInCart) {
-
+      //
       stripe.value = Stripe(stripe_secret);
       const elements = stripe.value.elements();
-      card.value = elements.create('card',{hidePostalCode:true})
+      card.value = elements.create('card',{hidePostalCode:true,style,})
 
       card.value.mount('#card-element')
     }
+    card.value.on('change', (event) => {
+    const errorEl = document.getElementById('card-errors');
+    if (event.error) {
+      errorEl.textContent = event.error.message;
+    } else {
+      errorEl.textContent = '';
+    }
+  });
   })
 
   const submitForm = ()=>{
@@ -104,7 +134,6 @@
           'last_name': lastName.value,
           'email': email.value,
           'phone': phone.value,
-          //'payment': payment.value,
           // optional
           'address': address.value,
           'comment': comment.value,
@@ -178,25 +207,33 @@
             </tr>
           </tbody>
         </table>
-        <div class="payment__methods">
-          <h3 class="checkout__title">Mode de paiment</h3>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="creditCard" id="payement_1" checked class="payment_input">
-            <label for="payement_1" class="payment_label">Par Carte</label>
-          </div>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="strip"  id="payement_2"  class="payment_input">
-            <label for="payement_2" class="payment_label">Par Stripe</label>
-          </div>
-          <div class="payment__option flex">
-            <input type="radio" v-model="payment" value="paypal" id="payement_3"  class="payment_input">
-            <label for="payement_3" class="payment_label">Par Paypal</label>
-          </div>
-
-        </div>
+        <p id="card-errors" style="color: #E24B4A; font-size: 12px; margin-top: 5px;"></p>
+        <div id="card-element" class="payment__methods"></div>
         <button @click="submitForm" type="button" class="btn btn-md">Confirmer</button>
       </div>
-      <div id="card-element"></div>
     </div>
   </section>
 </template>
+<style>
+#card-element {
+  background:  #f8f8f8;
+  border: 0.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 11px 14px;
+  height: 44px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+#card-element.StripeElement--focus {
+  border-color: #7F77DD;
+  box-shadow: 0 0 0 3px rgba(127, 119, 221, 0.12);
+  background: #ffffff;
+  outline: none;
+}
+#card-element.StripeElement--invalid {
+  border-color: #E24B4A;
+  box-shadow: 0 0 0 3px rgba(226, 75, 74, 0.10);
+}
+#card-element.StripeElement--complete {
+  border-color: #1D9E75;
+}
+</style>

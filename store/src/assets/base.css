@@ -10,7 +10,7 @@
   --primary-rgb: 32, 13, 125;
   --secondary-color: #b2a0e9;
   --title-color: hsl(0, 0%, 13%);
-  --text-color: hsl(154, 13%, 32%);
+    --text-color: hsl(154, 13%, 32%);
   --text-color-light: hsl(60, 1%, 56%);
   --body-color: hsl(0, 0%, 100%);
   --contrainer-color: hsl(0, 0%, 93%);

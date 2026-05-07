@@ -1725,3 +1725,6 @@
     grid-template-columns: 4fr 8fr;
   }
 }
+.CardField-input-wrapper {
+  border: 1px solid red;
+}
