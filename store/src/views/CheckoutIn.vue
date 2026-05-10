@@ -13,7 +13,6 @@
   ];
   const router = useRouter();
   const cart = useCartStore();
-  //const payment = ref(null);
   const stripe = ref({})
   const card = ref({})
   const firstName = ref(null);
@@ -28,9 +27,14 @@
       base: {
         color: '#1a1a1a',
         fontFamily: '"Inter", system-ui, sans-serif',
-        fontSize: '16px',
+        fontSmoothing: 'antialiased',
+        letterSpacing: '0.02em',
+        fontSize: '14px',
         '::placeholder': {
           color: '#9ca3af'
+        },
+        ':focus': {
+            borderColor: '#4E31CE'
         }
       },
       invalid: {
@@ -52,6 +56,8 @@
       card.value = elements.create('card',{hidePostalCode:true,style:stripStyle.style})
 
       card.value.mount('#card-element')
+    } else {
+      router.push('/catalog');
     }
   })
 
@@ -149,59 +155,72 @@
   <section class="checkout section--lg">
     <div class="checkout__container container grid">
       <div class="checkout__group">
-        <h3 class="section__title">Utilisateur</h3>
-        <form @submit.prevent="submitForm" class="form grid">
-          <input type="text" v-model="firstName"  class="form__input" placeholder="Entrez votre prénom " >
-          <input type="text" v-model="lastName"  class="form__input" placeholder="Entrez votre nom" >
-          <input type="text" v-model="email"  class="form__input" placeholder="Entrez email" >
-          <input type="text" v-model="phone" class="form__input" placeholder="Entrez le numéro de téléphone" >
-          <input type="text" v-model="address" class="form__input" placeholder="Entrez l'adresse " >
-          <h3 class="checkout__title">Commentaire</h3>
-          <textarea v-model="comment" class="form__input textarea" placeholder="Entrez un commentaire"></textarea>
-        </form>
-        <div class="form__notification" v-if="errors.length">
-          <ul v-for="err in errors" :key="err">
-            <li>{{ err }}</li>
-          </ul>
+        <div class="checkout_form-content">
+            <h3 class="section__title">Utilisateur</h3>
+            <form @submit.prevent="submitForm" class="form grid">
+              <input type="text" v-model="firstName"  class="form__input" placeholder="Entrez votre prénom " >
+              <input type="text" v-model="lastName"  class="form__input" placeholder="Entrez votre nom" >
+              <input type="text" v-model="email"  class="form__input" placeholder="Entrez email" >
+              <input type="text" v-model="phone" class="form__input" placeholder="Entrez le numéro de téléphone" >
+              <input type="text" v-model="address" class="form__input" placeholder="Entrez l'adresse " >
+              <h3 class="checkout__title">Commentaire</h3>
+              <textarea v-model="comment" class="form__input textarea" placeholder="Entrez un commentaire"></textarea>
+            </form>
+            <div class="form__notification" v-if="errors.length">
+              <ul v-for="err in errors" :key="err">
+                <li>{{ err }}</li>
+              </ul>
+          </div>
         </div>
+
       </div>
       <div class="checkout__group">
-        <h3 class="section__title">Validation de panier</h3>
-        <table class="order__table">
-          <thead>
-            <tr>
-              <th colspan="2">Article(s)</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item,index) in cart.items" :key="index">
-              <td><img :src="item.image_default" alt="article image" class="order__img"></td>
-              <td>
-                <h3 class="table__title">{{ item.title }}</h3>
-                <p class="table__quantity">X{{ item.quantity }}</p>
-              </td>
-              <td><span class="table__price">{{ (item.price * item.quantity).toFixed(2) }} €</span></td>
-            </tr>
-            <tr>
-              <td><span class="order__subtitle">Panier</span></td>
-              <td colspan="2"><span class="table__price">{{ cart.totalPrice }} €</span></td>
-            </tr>
-            <tr>
-              <td><span class="order__subtitle">Livraison</span></td>
-              <td colspan="2"><span class="table__price">5 €</span></td>
-            </tr>
-            <tr>
-              <td><span class="order__subtitle">Total</span></td>
-              <td colspan="2"><span class="table__grand-total"> {{ cart.totalPrice + 5 }}€</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <div id="card-element" class="payment__methods">
+        <div class="checkout_detail-content">
+          <h3 class="section__title">Validation de panier</h3>
+          <table class="order__table">
+            <thead>
+              <tr>
+                <th colspan="2">Article(s)</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item,index) in cart.items" :key="index">
+                <td><img :src="item.image_default" alt="article image" class="order__img"></td>
+                <td>
+                  <h3 class="table__title">{{ item.title }}</h3>
+                  <p class="table__quantity">X{{ item.quantity }}</p>
+                </td>
+                <td><span class="table__price">{{ (item.price * item.quantity).toFixed(2) }} €</span></td>
+              </tr>
+              <tr>
+                <td><span class="order__subtitle">Panier</span></td>
+                <td colspan="2"><span class="table__price">{{ cart.totalPrice }} €</span></td>
+              </tr>
+              <tr>
+                <td><span class="order__subtitle">Livraison</span></td>
+                <td colspan="2"><span class="table__price">5 €</span></td>
+              </tr>
+              <tr>
+                <td><span class="order__subtitle">Total</span></td>
+                <td colspan="2"><span class="table__grand-total"> {{ cart.totalPrice + 5 }}€</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="payment_content">
+            <h2 class="checkout__title">Informations de paiment</h2>
+            <ul class="checkout_list-payment">
+              <li><i class="fa-brands fa-cc-visa"></i></li>
+              <li><i class="fa-brands fa-cc-mastercard"></i></li>
+              <li><i class="fa-brands fa-cc-amex"></i></li>
+              <li><i class="fa-brands fa-cc-paypal"></i></li>
+            </ul>
+            <div id="card-element" class="payment__methods"></div>
+          </div>
 
 
+          <button @click="submitForm" type="button" class="btn btn-md">Confirmer</button>
         </div>
-        <button @click="submitForm" type="button" class="btn btn-md">Confirmer</button>
       </div>
 
     </div>
