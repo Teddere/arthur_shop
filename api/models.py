@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 
-from .utils import discount_val,generate_ref
+from .utils import discount_val,generate_ref,_generate_sku
 
 
 class Category(models.Model):
@@ -68,7 +68,7 @@ class Size(models.Model):
 
 class Color(models.Model):
     name = models.CharField(max_length=20,blank=True,null=True)
-    value = models.CharField(max_length=15,blank=True)
+    color = models.CharField(max_length=15,blank=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -109,15 +109,10 @@ class Product(models.Model):
     slug = models.SlugField(unique=True,blank=True,max_length=50)
 
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
-    size = models.ManyToManyField(Size,blank=True)
     tag = models.ManyToManyField(Tag,blank=True)
-    color = models.ManyToManyField(Color)
     badge = models.ForeignKey(Badge,on_delete=models.SET_NULL,blank=True,null=True)
     brand = models.CharField(max_length=100,blank=True,null=True)
-    percent = models.IntegerField(blank=True,null=True)
-    newPrice = models.DecimalField(blank=True,null=True,decimal_places=2, max_digits=10)
-    oldPrice = models.DecimalField(max_digits=10,decimal_places=2)
-    stock = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=10,decimal_places=2)
     warranty = models.IntegerField(blank=True,null=True)
 
     imgDefault = models.ImageField(upload_to='images/',blank=True,null=True)
@@ -126,12 +121,20 @@ class Product(models.Model):
     description = models.TextField(blank=True,null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
     class Meta:
         ordering = ['-created']
     def __str__(self):
         return f"{self.title}"
-    
+
+    @property
+    def total_stock(self):
+        return self.product_item.aggregate(
+            total = models.Sum('stock')
+        )['total'] or 0
+    # disponibilité
+    @property
+    def is_available(self):
+        return self.product_item.filter(stock__gt=0).exists()
     def get_absolute_url(self):
         return f"/{self.category.slug}/{self.slug}/"
     
@@ -151,6 +154,46 @@ class Product(models.Model):
             self.slug = slugify(self.title)
         if not self.ref:
             self.ref = generate_ref()
-        if self.percent:
-            self.newPrice = discount_val(self.oldPrice,self.percent)
         return super().save(*args,**kwargs)
+
+class ProductItem(models.Model):
+    product = models.ForeignKey(Product,related_name='product_item',on_delete=models.CASCADE)
+    size = models.ForeignKey(Size,on_delete=models.SET_NULL,blank=True,null=True)
+    color = models.ForeignKey(Color,on_delete=models.SET_NULL,blank=True,null=True)
+    sku = models.CharField(max_length=10,unique=True,blank=True)
+    stock = models.PositiveIntegerField(default=0)
+    low_stock = models.PositiveIntegerField(default=3)
+    percent = models.IntegerField(blank=True, null=True)
+    #help_text="Laisser vide pour utiliser le prix du produit parent"
+    oldPrice = models.DecimalField(max_digits=10,decimal_places=2,blank=True,null=True)
+    newPrice = models.DecimalField(max_digits=10,decimal_places=2, blank=True,null=True,editable=False)
+
+    class Meta:
+        unique_together = ('product','size','color')
+        verbose_name = 'Déclinaison'
+        verbose_name_plural = 'Déclinaisons'
+
+    def __str__(self):
+        return f"{self.product.title} | {self.size} | {self.color}"
+    @property
+    def base_price(self):
+        return self.oldPrice if self.oldPrice is not None else self.product.price
+    @property
+    def stock_status(self):
+        if self.stock == 0 : return 'out_of_stock'
+        if self.stock <= self.low_stock: return 'low_stock'
+        return 'in_stock'
+    @property
+    def is_available(self):
+        return self.stock > 0
+
+    def save(self,*args,**kwargs):
+        if not self.sku:
+            self.sku = _generate_sku(self.product,self.size,self.color)
+        if self.percent:
+            self.newPrice = discount_val(self.base_price,self.percent)
+        return super().save(*args,**kwargs)
+
+
+
+

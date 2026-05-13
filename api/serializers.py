@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product, Badge, Color, Size,Tag
+from .models import Category, Product, ProductItem,Badge, Color, Size,Tag
 
 # Category
 class CategorySerializer(serializers.ModelSerializer):
@@ -25,10 +25,13 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('name',)
+
+
 # resume product
 class ProductSerializer(serializers.ModelSerializer):
     badge = BadgeSerializer(read_only=True)
     category = CategorySerializer(read_only=True)
+
     class Meta:
         model = Product
         fields = (

@@ -50,11 +50,11 @@ export const useCartStore=defineStore('cart',()=>{
   });
 
   // add product in cart
-  const addToCart = (product)=>{
+  const addToCart = (product,quantity=1)=>{
     const existingItem = items.value.find(item => item.id === product.id );
 
     if(existingItem) {
-      existingItem.quantity +=1;
+      existingItem.quantity += quantity;
     }
     else {
       items.value.push({
@@ -63,7 +63,7 @@ export const useCartStore=defineStore('cart',()=>{
         price: product.newPrice || product.oldPrice,
         image_default: product.get_image_default,
         description: description(product.description,12),
-        quantity: 1,
+        quantity: quantity,
         ref: product.ref
       });
     }

@@ -4,14 +4,19 @@
   import {useRoute} from "vue-router";
   import ProductItem from "@/components/ProductItem.vue";
   import Breadcrumb from '@/components/Breadcrumb.vue';
+  import {useCartStore} from'@/stores/cart.js';
+  import {useToastStore} from '@/stores/toast.js'
 
+
+  const toast = useToastStore();
+  const cart = useCartStore();
   const route = useRoute()
   // navigation d'entête
   const links = ref([]);
   // liste d'articles associés
   const productList = ref([]);
   // article courante
-  const product = ref({});
+  const productObject = ref({});
   // navigation de menu
   const activeTab = ref('info');
   // liste d'avis
@@ -86,9 +91,9 @@
         links.value.push({'name':response.data.category.name,'nameUrl':'catalog_name','params':{'category_slug':response.data.category.name.toLocaleLowerCase()}});
         links.value.push({'name':response.data.title,'nameUrl':null})
         // product value
-        product.value = response.data;
+        productObject.value = response.data;
         // page title
-        document.title = `${product.value.title} | Arthur`;
+        document.title = `${productObject.value.title} | Arthur`;
       })
       .catch(err=>{
         console.log(err)
@@ -121,7 +126,7 @@
   watch(
     ()=> route.params.product_slug,
     ()=>{
-      product.value={};
+      productObject.value={};
       selectImage.value = null;
       selectColor.value = null;
       selectSize.value = null;
@@ -135,6 +140,18 @@
       scrollToProduct();
     }
   );
+  // add product to cart
+  const productNumber = ref(1);
+
+  const addProductCart = ()=>{
+    const quantity = parseInt(productNumber.value);
+    if(isNaN(quantity) || quantity < 1) {
+      toast.warning('Veuillez la quantité souhaiter !')
+    }
+    else {
+      cart.addToCart(productObject.value,quantity);
+    }
+  }
 </script>
 <template>
   <Breadcrumb :links="links" />
@@ -144,37 +161,37 @@
       <div class="details___group">
         <img :src="getImageUrl(selectImage)" alt="product image" class="details__img" >
         <div class="detail__small-images grid">
-          <img :src="product.get_image_default"
-            @click="selectImage = product.get_image_default"
-            :class="{'active': selectImage === product.get_image_default}"
+          <img :src="productObject.get_image_default"
+            @click="selectImage = productObject.get_image_default"
+            :class="{'active': selectImage === productObject.get_image_default}"
             alt="description product image"
             class="details__small-img"
           >
-          <img :src="product.get_image_hover"
-            @click="selectImage = product.get_image_hover"
-            :class="{'active': selectImage === product.get_image_hover}"
+          <img :src="productObject.get_image_hover"
+            @click="selectImage = productObject.get_image_hover"
+            :class="{'active': selectImage === productObject.get_image_hover}"
             alt="description product image"
             class="details__small-img"
           >
         </div>
       </div>
       <div class="details___group">
-        <h3 class="details__title">{{product.title}}</h3>
-        <p class="details__brand">Marque: <span>{{product.brand}}</span></p>
-        <div class="details__price flex" v-if="product.newPrice">
-          <span class="new__price">{{product.newPrice}} €</span>
-          <span class="old__price">{{product.oldPrice}} €</span>
-          <span class="save__price">{{product.percent}}% de réduction</span>
+        <h3 class="details__title">{{productObject.title}}</h3>
+        <p class="details__brand">Marque: <span>{{productObject.brand}}</span></p>
+        <div class="details__price flex" v-if="productObject.newPrice">
+          <span class="new__price">{{productObject.newPrice}} €</span>
+          <span class="old__price">{{productObject.oldPrice}} €</span>
+          <span class="save__price">{{productObject.percent}}% de réduction</span>
         </div>
         <div class="details__price flex" v-else>
-          <span class="new__price">{{product.oldPrice}} €</span>
+          <span class="new__price">{{productObject.oldPrice}} €</span>
         </div>
-        <p class="short__description">{{product.description}}</p>
+        <p class="short__description">{{productObject.description}}</p>
         <ul class="product__list">
           <li class="list__item flex">
             <i class="fa-solid fa-crown"></i>
-            <template v-if="product.warranty === 1"> 1 an de garantie de fabrication</template>
-            <template v-else-if="product.warranty > 1">{{product.warranty}} ans de garantie de fabrication</template>
+            <template v-if="productObject.warranty === 1"> 1 an de garantie de fabrication</template>
+            <template v-else-if="productObject.warranty > 1">{{productObject.warranty}} ans de garantie de fabrication</template>
             <template v-else>Article non garanti</template>
           </li>
           <li class="list__item flex">
@@ -184,8 +201,8 @@
         </ul>
         <div class="details__color flex">
           <span class="details__color-title">Couleur</span>
-          <ul class="color__list" v-if="product.color">
-            <li v-for="(color,index) in product.color" :key="index" >
+          <ul class="color__list" v-if="productObject.color">
+            <li v-for="(color,index) in productObject.color" :key="index" >
               <button type="button"
                 :style="{backgroundColor:color.value}"
                 :class="{'active': selectColor === color.value}"
@@ -199,8 +216,8 @@
         </div>
         <div class="details__size flex">
           <span class="details__size-title">Taille</span>
-          <ul class="size__list" v-if="product.size">
-            <li v-for="(size,index) in product.size" :key="index">
+          <ul class="size__list" v-if="productObject.size">
+            <li v-for="(size,index) in productObject.size" :key="index">
               <button type="button"
                       @click="selectSize = size.code"
                       :class="{'size-active': selectSize === size.code}"
@@ -212,26 +229,26 @@
           </ul>
           <span v-else>Taille unique</span>
         </div>
-        <form >
+        <form @submit.prevent="addProductCart">
           <div class="details__action">
-            <input type="number" value="3" name="article_number" id="article_number" class="quantity">
+            <input type="number" v-model="productNumber" min="1" name="article_number" id="article_number" class="quantity">
             <button type="submit" class="btn btn-sm">Mettre au panier</button>
             <button type="button" class="details__action-btn">
-              <i class="fa-solid fa-heart"></i>
+              <i class="fa-solid fa-right-left"></i>
             </button>
           </div>
         </form>
         <ul class="details__meta">
-          <li class="meta__list flex">Ref:<span> {{product.ref}}</span></li>
+          <li class="meta__list flex">Ref:<span> {{productObject.ref}}</span></li>
           <li class="meta__list flex">
             Etiquette:
-            <template v-for="(tag,index) in product.tag" :key="index">
-              <span v-if="index < product.tag.length - 1">{{tag.name}},</span>
+            <template v-for="(tag,index) in productObject.tag" :key="index">
+              <span v-if="index < productObject.tag.length - 1">{{tag.name}},</span>
               <span v-else>{{tag.name}}</span>
             </template>
           </li>
           <li class="meta__list flex">
-            Disponibilité:<span>{{product.stock}} article(s) en stock</span>
+            Disponibilité:<span>{{productObject.stock}} article(s) en stock</span>
           </li>
         </ul>
       </div>

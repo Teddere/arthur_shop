@@ -72,10 +72,20 @@
         </thead>
         <tbody>
           <tr v-for="(item,index) in cart.items" :key="index">
-            <td><img :src="item.image_default" alt="article image" class="table__img"></td>
             <td>
-            <h3 class="table__title">{{item.title}}</h3>
-            <p class="table__description">{{item.description}}</p>
+              <routerLink :to="{}">
+                <img :src="item.image_default" alt="article image" class="table__img">
+              </routerLink>
+            </td>
+            <td>
+              <div class="table__description">
+                <h3 class="table__title">{{item.title}}</h3>
+                <p class="table__text">{{item.description}}</p>
+                <div class="table__size-color">
+                  <span class="size__item">L</span>
+                  <span class="color__item"></span>
+                </div>
+              </div>
             </td>
             <td>
               <span  class="table__price">{{item.price}} €</span>
@@ -127,11 +137,7 @@
         </div>
     </div>
   </section>
+
 </template>
 
-<style scoped>
-.empty-cart {
-  text-align: center;
-  padding: 40px;
-}
-</style>
+
