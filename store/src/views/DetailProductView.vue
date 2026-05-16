@@ -17,6 +17,8 @@
   ]);
   // product item element current
   const product = ref({});
+  // product categories items
+  const productList = ref([]);
   // size list product item element current
   const sizeList = ref([]);
   // navigations menu
@@ -125,6 +127,7 @@
   // onMounted
   onMounted(()=>{
     getProduct()
+    getProductAll()
   })
   // product element
   const getProduct = ()=>{
@@ -164,6 +167,18 @@
       });
   }
 
+  // category product list
+  const getProductAll = ()=>{
+    const category_slug = route.params.category_slug
+    axios
+      .get(`/api/v1/categories/detail/${category_slug}`)
+      .then(response=>{
+        productList.value = response.data;
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+  }
   // add product to cart
   const addProductCart = ()=>{
     const quantity = parseInt(productCount.value);
@@ -177,6 +192,7 @@
       // cart.addToCart()
     }
   }
+
 </script>
 <template>
   <Breadcrumb :links="links" />
@@ -270,11 +286,114 @@
             </template>
           </li>
           <li class="meta__list flex">
-              Disponibilité:<span>{{product.element.stock}} article(s) en stock</span>
+              Disponibilité:<span>{{product.element?.stock}} article(s) en stock</span>
           </li>
         </ul>
       </div>
     </div>
   </section>
+  <!-- ========= DETAILS TAB =========================-->
+  <section class="details_tab container">
+    <div class="details__tabs">
+      <span
+        @click="activeTab = 'info'"
+        :class="{'active-tab': activeTab === 'info' }"
+        class="detail__tab"
+      >Description détaillée</span>
+      <span
+        @click="activeTab = 'reviews'"
+        :class="{'active-tab': activeTab === 'reviews' }"
+        class="detail__tab"
+      >Avis({{reviews.length}})</span>
+    </div>
+    <div class="details__tabs-content">
+      <transition name="fade" mode="out-in">
+        <div v-if="activeTab === 'info'" class="details__tab-content">
+          <table class="info__table">
+            <tr v-for="(intem,index) in productInfo" :key="index">
+              <th>{{intem.title}}</th>
+              <td>{{intem.content}}</td>
+            </tr>
+          </table>
+        </div>
+      </transition>
+      <transition name="fade" mode="out-in">
+        <div v-if="activeTab === 'reviews'" class="details__tab-content">
+          <div class="reviews__container grid">
+            <transition-group name="review" tag="div">
+              <article v-for="(review, index) in reviews" :key="`review-${index}`" class="review__single">
+                <div>
+                  <img :src="getImageUrl(review.image)" :alt="review.author" class="review__img">
+                  <h4 class="review__title">{{ review.author }}</h4>
+                </div>
+                <div class="review__data">
+                  <div class="review__rating">
+                    <i v-for="n in review.rating" :key="n" class="fa-regular fa-star"></i>
+                  </div>
+                  <p class="review__description">{{review.text}}</p>
+                  <span class="review__data">{{review.date}}</span>
+                </div>
+              </article>
+            </transition-group>
+          </div>
+          <div class="review__form">
+            <h4 class="review__form-title">Donner un avis</h4>
+            <div class="rate__product">
+              <button type="button"
+                      v-for="n in 5"
+                      :key="n"
+                      @click="noteReview = n"
+                      @mouseenter="hoverReview = n"
+                      @mouseleave="hoverReview = 0"
+                      :class="{'active' : (hoverReview || noteReview) >= n}"
+                      class="star_review"
+              >
+                <i class="fa-solid fa-star"></i>
+              </button>
+            </div>
+            <form  class="form grid">
+              <textarea  class="form__input textarea" placeholder="Entrez votre commentaire"></textarea>
+              <div class="form__group grid">
+                <input type="text" placeholder="Entrez votre nom" class="form__input">
+                <input type="email" placeholder="Entrez votre email" class="form__input">
+              </div>
+              <div class="form__btn">
+                <button type="submit" class="btn">Soumettre</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </transition>
+    </div>
+  </section>
+  <!-- ========= PRODUCTS ==================-->
+  <section class="products container section--lg">
+    <h3 class="section__title">Articles <span>Similaires</span></h3>
+    <div class="products__container grid">
+      <ProductItem
+        v-for="(prod,index) in productList"
+        :key="index"
+        :product="prod"
+      ></ProductItem>
+    </div>
+  </section>
 </template>
-<style></style>
+<style scoped>
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity 0.3s ease;
+  }
+  .fade-enter-from, .fade-leave-to {
+    opacity: 0;
+  }
+  .review-enter-active, .review-leave-active {
+    transition: all 0.3s ease;
+  }
+  .review-enter-from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  .review-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+</style>
