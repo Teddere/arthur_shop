@@ -10,7 +10,7 @@ from .serializers import ProductSerializer,ProductDetailSerializer,CategoryDetai
 # recupération de toutes les catégories
 class CategoryList(APIView):
     def get(self,request,format=None):
-        categories = Category.objects.all()[:10]
+        categories = Category.objects.all()
         serializer = CategoryDetailSerializer(categories,many=True)
         return Response(serializer.data)
 # catégorie sélectionnée
@@ -26,7 +26,7 @@ class CategoryListSelect(APIView):
         product = self.get_object_select(category_slug)
         serializer = ProductSerializer(product,many=True)
         return Response(serializer.data)
-# catégorie associée au product
+# catégorie associée au detail product
 class CategoryDetailSelect(APIView):
     def get_object_select(self,category_slug):
         try:

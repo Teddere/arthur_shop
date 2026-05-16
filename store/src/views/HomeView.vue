@@ -12,6 +12,7 @@ import ProductItem from '@/components/ProductItem.vue'
 import ShowaseItem from '@/components/ShowaseItem.vue'
 
 export default {
+  name: 'HomeView',
   data: () => {
     return {
       // liste de toutes les catégories
@@ -271,8 +272,8 @@ export default {
         <SwiperSlide v-for="(category,index) in categoryItem" :key="index">
           <CategoryItem
             :name_category="category.name"
-            :image="category.get_image_category"
-            :category_url="category.get_absolute_url"
+            :image="category.image_category"
+            :category_url="category.url"
           ></CategoryItem>
         </SwiperSlide>
       </Swiper>

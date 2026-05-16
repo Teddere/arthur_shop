@@ -1,6 +1,5 @@
-from idlelib.colorizer import color_config
-
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from django.utils.html import format_html
 
 from .models import Category, Product, ProductItem, Tag, Size, Badge, Color
@@ -112,7 +111,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def is_available(self,obj):
         if obj.is_available:
-            return format_html('<span style="color:#2d6a4">✅ Disponible</span>')
-        return format_html('<span style="color:#c0392b">❌ Rupture</span>')
+            return mark_safe('<span style="color:#2d6a4">✅ Disponible</span>')
+        return mark_safe('<span style="color:#c0392b">❌ Rupture</span>')
     is_available.short_description = 'Is available'
     is_available.boolean = False

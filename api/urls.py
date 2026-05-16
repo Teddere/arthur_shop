@@ -7,7 +7,7 @@ urlpatterns = [
     path('categories/',views.CategoryList.as_view(),name='category_all'),
     # catégorie sélectionnée
     path('catalog/<slug:category_slug>/',views.CategoryListSelect.as_view()),
-    # catégorie associée au product
+    # catégorie associée au detail product
     path('categories/detail/<slug:category_slug>/',views.CategoryDetailSelect.as_view(),name='category_detail'),
     # recupération de tous les products
     path('products/all/',views.ProductList.as_view(),name='product_all'),
