@@ -72,27 +72,24 @@
         </thead>
         <tbody>
           <tr v-for="(item,index) in cart.items" :key="index">
-            <td>
+            <td class="table__product-image">
               <routerLink :to="item.url">
                 <img :src="item.image_default" alt="article image" class="table__img">
               </routerLink>
             </td>
-            <td>
+            <td class="table__product-detail">
               <div class="table__description">
                 <h3 class="table__title"><routerLink :to="item.url">{{item.title}}</routerLink></h3>
-                <p class="table__text">{{item.description}}</p>
                 <div class="table__size-color">
-                  <span class="size__item">{{item.size}}</span>
-                  <span class="color__item"
-                        :style="{'background': item.color.value ? item.color.value : '#E2E6E9' }"
-                  ></span>
+                  <span v-if="item.size !=='unique'" class="size__item">{{item.size}}</span>
+                  <span class="color__item">{{ item.color.toLowerCase() }}</span>
                 </div>
               </div>
             </td>
-            <td>
+            <td class="table__product-price">
               <span  class="table__price">{{item.price}} €</span>
             </td>
-            <td>
+            <td class="table__product-quantity">
               <div class="btn__carts">
                 <button @click="productTop(item.id)" type="button" class="btn-cart btn-up">
                   <i class="fa-solid fa-arrow-up"></i>
@@ -103,10 +100,10 @@
                 </button>
               </div>
             </td>
-            <td>
+            <td class="table__product-subtotal">
               <span class="table__subtotal">{{(item.price * item.quantity).toFixed(2)}} €</span>
             </td>
-            <td><i @click="removeItem(item.id)" class="table__trash fa-solid fa-trash-alt"></i></td>
+            <td class="table__product-action"><i @click="removeItem(item.id)" class="table__trash fa-solid fa-trash-alt"></i></td>
           </tr>
         </tbody>
 
@@ -127,8 +124,8 @@
                 <td><span class="cart__total-price">{{subTotal.toFixed(2)}} €</span></td>
               </tr>
               <tr>
-                <td><span class="cart__total-title">Total</span></td>
-                <td><span class="cart__total-price">565.00 €</span></td>
+                <td><span class="cart__total-title global__total-title">Total</span></td>
+                <td><span class="cart__total-price global__total-price">565.00 €</span></td>
               </tr>
             </tbody>
           </table>
