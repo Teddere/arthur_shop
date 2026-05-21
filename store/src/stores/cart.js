@@ -50,27 +50,28 @@ export const useCartStore=defineStore('cart',()=>{
   });
 
   // add product in cart
-  const addToCart = (product,quantity=1)=>{
+  const addToCart = (product)=>{
     const existingItem = items.value.find(item => item.id === product.element.id );
     if(existingItem) {
-      existingItem.quantity += quantity;
+      existingItem.quantity += 1;
     }
     else {
       items.value.push({
         id: product.element.id,
+        product_id: product.id,
         title: product.title,
         price: product.element.newPrice || product.element.base_price,
         size: product.element.size,
         color: product.element.color.name,
         image_default: product.image_default,
         description: description(product.description,10),
-        quantity: quantity,
+        quantity: 1,
         ref: product.ref,
         sku: product.element.sku,
         url: product.url,
       });
     }
-   // updateStorageCart();
+   updateStorageCart();
     return `${product.title} a été ajouter au panier`;
   }
 
@@ -110,6 +111,36 @@ export const useCartStore=defineStore('cart',()=>{
      updateStorageCart();
   }
 
+  const updateProduct = (product,quantity)=>{
+    const existingItem = items.value.find((item)=> item.product_id === product.id);
+    if(existingItem) {
+     existingItem.id = product.element.id
+      existingItem.quantity = quantity;
+      existingItem.size = product.element.size;
+      existingItem.color = product.element.color.name;
+      existingItem.price = product.element.newPrice || product.element.base_price;
+      existingItem.sku = product.element.sku;
+    }
+    else {
+      items.value.push({
+        id: product.element.id,
+        product_id: product.id,
+        title: product.title,
+        price: product.element.newPrice || product.element.base_price,
+        size: product.element.size,
+        color: product.element.color.name,
+        image_default: product.image_default,
+        description: description(product.description,10),
+        quantity: quantity,
+        ref: product.ref,
+        sku: product.element.sku,
+        url: product.url,
+      });
+
+    }
+    /*updateStorageCart();
+    return `${product.title} a été ajouter au panier`;*/
+  }
   // clearn cart
   const clearCart =()=>{
     items.value = [];
@@ -128,6 +159,7 @@ export const useCartStore=defineStore('cart',()=>{
     updateDownProduct,
     editProduct,
     removeCart,
+    updateProduct,
     clearCart
   }
 })

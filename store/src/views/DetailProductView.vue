@@ -187,7 +187,9 @@
       toast.error('Pas assez de produit pour le moment !')
     }
     else {
-      // cart.addToCart()
+      console.log(product.value)
+      cart.updateProduct(product.value,quantity);
+      toast.success(`${product.value.title} ajouté au panier !`)
     }
   }
 
@@ -250,7 +252,7 @@
           </ul>
           <span v-else class="option">Pas d'option de couleur</span>
         </div>
-        <div class="details__size flex">
+        <div class="details__size flex" >
           <span class="details__size-title">Taille</span>
           <ul class="size__list" v-if="product.size_list">
             <li v-for="(sizeProduct,index) in product.size_list" :key="index">
@@ -263,11 +265,10 @@
               </button>
             </li>
           </ul>
-          <span v-else>Taille unique</span>
         </div>
         <form @submit.prevent="addProductCart">
           <div class="details__action">
-            <input type="number" v-model="productCount"  id="article_number" min="1" :max="product.element?.stock" class="quantity">
+            <input type="number" v-model="productCount"  id="article_number" min="1"  class="quantity">
             <button type="submit" class="btn btn-sm">Mettre au panier</button>
             <button type="button" class="details__action-btn">
               <i class="fa-solid fa-right-left"></i>
