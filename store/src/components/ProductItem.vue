@@ -17,7 +17,7 @@
     if (url.includes('http') || url.includes('media')) return url;
     return new URL(`../assets/images/${url}`,import.meta.url).href;
   }
-  const handleAddToCart = async ()=>{
+  const handleAddToCart = ()=>{
     cart.addToCart(props.product)
     toast.success(`${props.product.title} ajouté au panier !`,3000);
   }

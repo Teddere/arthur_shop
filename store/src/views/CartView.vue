@@ -73,17 +73,19 @@
         <tbody>
           <tr v-for="(item,index) in cart.items" :key="index">
             <td>
-              <routerLink :to="{}">
+              <routerLink :to="item.url">
                 <img :src="item.image_default" alt="article image" class="table__img">
               </routerLink>
             </td>
             <td>
               <div class="table__description">
-                <h3 class="table__title">{{item.title}}</h3>
+                <h3 class="table__title"><routerLink :to="item.url">{{item.title}}</routerLink></h3>
                 <p class="table__text">{{item.description}}</p>
                 <div class="table__size-color">
-                  <span class="size__item">L</span>
-                  <span class="color__item"></span>
+                  <span class="size__item">{{item.size}}</span>
+                  <span class="color__item"
+                        :style="{'background': item.color.value ? item.color.value : '#E2E6E9' }"
+                  ></span>
                 </div>
               </div>
             </td>

@@ -136,7 +136,6 @@
     axios
       .get(`/api/v1/products/${category_slug}/${product_slug}`)
       .then(response=>{
-        console.log(response.data)
         // Breadcrumb navigation
         links.value.push({
           'name':response.data.category.name,
@@ -156,7 +155,6 @@
         product.value.size_list.map((productItem)=>{
           if (selectSize.value === productItem.size) {
             sizeList.value = productItem.items;
-            console.log(sizeList.value);
           }
         });
         // title page

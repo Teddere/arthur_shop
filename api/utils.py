@@ -16,7 +16,7 @@ def discount_val(valeur,percent):
 def _generate_sku(product,size,color):
     size_code = size.code[:3].upper() if size else 'NS'
     color_code = color.name[:3].upper() if color else 'NC'
-    return f'${product.ref}-{size_code}-{color_code}'
+    return f'{product.ref}-{size_code}-{color_code}'
 def check_stock(article,quantity):
     if article >= quantity:
         article -= quantity

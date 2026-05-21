@@ -51,23 +51,26 @@ export const useCartStore=defineStore('cart',()=>{
 
   // add product in cart
   const addToCart = (product,quantity=1)=>{
-    const existingItem = items.value.find(item => item.id === product.id );
-
+    const existingItem = items.value.find(item => item.id === product.element.id );
     if(existingItem) {
       existingItem.quantity += quantity;
     }
     else {
       items.value.push({
-        id: product.id,
+        id: product.element.id,
         title: product.title,
-        price: product.newPrice || product.oldPrice,
-        image_default: product.get_image_default,
+        price: product.element.newPrice || product.element.base_price,
+        size: product.element.size,
+        color: {name: product.element.color.name,value:product.element.color.value},
+        image_default: product.image_default,
         description: description(product.description,12),
         quantity: quantity,
-        ref: product.ref
+        ref: product.ref,
+        sku: product.element.sku,
+        url: product.url,
       });
     }
-    updateStorageCart();
+   // updateStorageCart();
     return `${product.title} a été ajouter au panier`;
   }
 

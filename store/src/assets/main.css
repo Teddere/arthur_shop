@@ -1187,7 +1187,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: var(--border-color-alt);
+  border: 1px solid var(--primary-color);
 }
 .table__trash {
   color: var(--text-color-light);

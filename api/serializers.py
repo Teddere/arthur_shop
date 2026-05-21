@@ -67,6 +67,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'badge',
             'category',
             'price',
+            'description',
             'is_available',
             'element',
             'image_default',
