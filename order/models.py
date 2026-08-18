@@ -7,13 +7,6 @@ from .utils import _generate_ref
 User = get_user_model()
 
 class Order(models.Model):
-    class StatusChoices(models.TextChoices):
-        pending = 'pending', 'En attente'
-        confirmed = 'confirmed', 'Confirmée'
-        shipped = 'shipped', 'Expédiée'
-        delivered = 'delivered', 'Livrée'
-        cancelled = 'cancelled', 'Annulée'
-        refounded = 'refunded', 'Remboursée'
     
     class PaymentChoices(models.TextChoices):
         pending = 'pending', 'En attente'
@@ -25,9 +18,8 @@ class Order(models.Model):
     # référence 
     ref = models.CharField(max_length=20,unique=True,blank=True)
     # status
-    status = models.CharField(max_length=20,choices=StatusChoices,default=StatusChoices.pending)
     paymenet_status = models.CharField(
-        max_length=20,choices=PaymentChoices,default=PaymentChoices.pending
+        max_length=20,choices=PaymentChoices,default=PaymentChoices.paid
     )
     # paiement
     paid_amount = models.DecimalField(max_digits=15,decimal_places=2,null=True,blank=True)
@@ -86,7 +78,7 @@ class OrderItem(models.Model):
 
     class Meta:
         verbose_name = 'Article commandé'
-        verbose_plural = 'Articles commandés'
+        verbose_name_plural = 'Articles commandés'
     
     def __str__(self):
         return f"{self.product_title} X{self.quantity} ({self.product_sku})"

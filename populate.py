@@ -29,7 +29,7 @@ list_color = [
     {'id':2,'name':'noir','hex':'#000000'},
     {'id':3,'name':'gris','hex':'#808080'},
     {'id':4,'name':'marron','hex':'#8B4513'},
-    {'id':5,'name':'bleu-ciel','hex':'#87ceeb'},
+    {'id':5,'name':'ciel','hex':'#87ceeb'},
     {'id':6,'name':'beige','hex':'#f5f5dc'},
     {'id':7,'name':'argent','hex':'#c0c0c0'},
     {'id':8,'name':'or','hex':'#ffd700'},
@@ -78,10 +78,6 @@ listProducts = [
         'colors': ['blanc', 'noir'],
         'sizes': [
             {'36': [
-                {'color':'blanc','oldPrice':None,'percent':None,'stock': random.randint(0,30)},
-                {'color':'noir','price':None,'percent':None,'stock': random.randint(0,30)}
-            ]},
-            {'41' : [
                 {'color':'blanc','oldPrice':None,'percent':None,'stock': random.randint(0,30)},
                 {'color':'noir','price':None,'percent':None,'stock': random.randint(0,30)}
             ]},
@@ -635,7 +631,7 @@ listProducts = [
             {
                 'XL': [
                     {'color': 'noir', 'oldPrice': None, 'percent': 20, 'stock': random.randint(0, 20)},
-                    {'color': 'noir', 'oldPrice': None, 'percent': 20, 'stock': random.randint(0, 20)},
+                    {'color': 'blanc', 'oldPrice': None, 'percent': 20, 'stock': random.randint(0, 20)},
                 ]
             },
         ],
@@ -1135,13 +1131,13 @@ listProducts = [
                 ]
             },
             {
-                '37': [
+                '38': [
                     {'color': 'blanc', 'oldPrice': None, 'percent': 22, 'stock': random.randint(0, 30)},
                     {'color': 'noir', 'oldPrice': None, 'percent': 22, 'stock': random.randint(0, 20)},
                 ]
             },
             {
-                '38': [
+                '40': [
                     {'color': 'blanc', 'oldPrice': None, 'percent': 22, 'stock': random.randint(0, 30)},
                     {'color': 'noir', 'oldPrice': None, 'percent': 22, 'stock': random.randint(0, 20)},
                 ]
@@ -1483,12 +1479,6 @@ listProducts = [
             },
             {
                 'L': [
-                    {'color': 'noir', 'oldPrice': None, 'percent': 25, 'stock': random.randint(0, 30)},
-                    {'color': 'beige', 'oldPrice': None, 'percent': 25, 'stock': random.randint(0, 30)},
-                ]
-            },
-            {
-                'L': [
                     {'color': 'noir', 'oldPrice': 150, 'percent': 15, 'stock': random.randint(0, 30)},
                     {'color': 'beige', 'oldPrice': 150, 'percent': 15, 'stock': random.randint(0, 30)},
                 ]
@@ -1641,7 +1631,6 @@ listProducts = [
         'imgHover': 'images/pull-6.png',
         'description': "Le pull Stella McCartney est conçu dans une démarche écoresponsable, avec de la laine recyclée, du coton biologique et de l'élasthanne. Sa coupe épurée en fait un basique luxueux. Disponible en gris ou noir, il se marie avec tout. Les finitions sont impeccables, sans logo apparent. Idéal pour ceux qui allient mode et conscience environnementale. Une promotion rend ce produit encore plus accessible. Un choix engagé."
     },
-
     {
         'title': 'Pull Stella McCartney',
         'category': 'Pull',
@@ -2094,19 +2083,19 @@ listProducts = [
         'sizes': [
             {
                 'S': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'M': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'L': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
@@ -2123,23 +2112,23 @@ listProducts = [
     {
         'title': 'Dynamique Hawai lunaire',
         'category': 'Chemise',
-        'colors': ['bleu-ciel', 'bleu'],
+        'colors': ['ciel', 'bleu'],
         'sizes': [
             {
                 'S': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'M': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'L': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 50,'stock':random.randint(0,10)},
                 ]
             },
@@ -2158,23 +2147,23 @@ listProducts = [
     {
         'title': 'Dynamique Hawai',
         'category': 'Chemise',
-        'colors': ['bleu-ciel', 'bleu'],
+        'colors': ['ciel', 'bleu'],
         'sizes': [
             {
                 'S': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'M': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
             {
                 'L': [
-                    {'color':'bleu-ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
+                    {'color':'ciel','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                     {'color':'bleu','oldPrice': None,'percent': 35,'stock':random.randint(0,10)},
                 ]
             },
@@ -2497,11 +2486,13 @@ def populate_product_table():
                 imgDefault=product_data['imgDefault'],
                 imgHover=product_data['imgHover']
             )
+            
             # register tags product
             if product_data['tags']:
                 for tag_name in product_data['tags']:
                     tag_obj, _ = Tag.objects.get_or_create(name=tag_name)
                     product.tag.add(tag_obj)
+            print(i,product_data['title'])
             # register product Item
             if product_data['sizes']:
                 for size_list in product_data['sizes']:
@@ -2549,31 +2540,38 @@ def populate_personal_product(nbre):
             imgDefault=random.choice(list_imageDefault),
             imgHover=random.choice(list_imageHover)
         )
-        tags = random.choices(list_tag, k=3)
+        tags = random.sample(list_tag, k=min(3,len(list_tag)))
+
         for tag in tags:
             if tag['name']:
                 tagValue = Tag.objects.get(name=tag['name'])
                 product.tag.add(tagValue)
-        colors = random.sample([c for c in list_color if c['name']],
-                               k=min(3, len([c for c in list_color if c['name']])))
-        for color in colors:
-            if color['name']:
-                colorValue = Color.objects.get(name=color['name'])
-                product.color.add(colorValue)
 
-        sizes = random.choices(list_size, k=4)
+        sizes = random.sample(list_size, k=min(4,len(list_size)))
         sizeValue = None
+        colorValue = None
         for size in sizes:
             if size:
-                sizeValue = Size.objects.get(code=size)
-                product.size.add(sizeValue)
-
+                sizeValue = Size.objects.get(code=size)            
+            colors = random.sample([c for c in list_color if c['name']],
+                               k=min(3, len([c for c in list_color if c['name']])))
+            for color in colors:
+                if color['name']:
+                    colorValue = Color.objects.get(name=color['name'])
+                ProductItem.objects.get_or_create(
+                    product=product,
+                    size=sizeValue,
+                    color=colorValue,
+                    stock= random.randint(5, 50),
+                    percent= random.choice([None, 15, 20, 25, 30, 40, 45, 50])
+                    
+                )
         print("Produit crée : ", product.title)
 
 
 if __name__ == '__main__':
 
-#    nbre = int(input('Entrer le nombre de produit \t'))
+    nbre = int(input('Entrer le nombre de produit \t'))
     print('Remplissage des catégories')
     populate_category_table()
     print('Remplissage des tailles')
@@ -2584,8 +2582,8 @@ if __name__ == '__main__':
     populate_badge_table()
     print('Remplissage de tags')
     populate_tag_table()
-#    print('product faker')
-    #populate_personal_product(nbre)
+    print('product faker')
+    populate_personal_product(nbre)
     print('Remplissage de produits personalisé')
     populate_product_table()
     print('Base de données remplie avec succès !')

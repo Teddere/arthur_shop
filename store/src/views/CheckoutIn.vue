@@ -115,9 +115,8 @@
     for (let i=0; i < cart.items.length; i++) {
       const item = cart.items[i]
       const obj = {
-        product : item.id,
+        productItem : item.id,
         quantity: parseInt(item.quantity),
-        price: parseFloat(item.price)
       }
 
       items.push(obj)
@@ -129,7 +128,6 @@
           'last_name': lastName.value,
           'email': email.value,
           'phone': phone.value,
-          //'payment': payment.value,
           // optional
           'address': address.value,
           'comment': comment.value,
@@ -141,7 +139,6 @@
       .then(response=>{
         cart.clearCart();
         router.push('/cart/success');
-        console.log(response.data)
       })
       .catch(error=>{
 

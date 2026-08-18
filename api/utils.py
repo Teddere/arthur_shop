@@ -10,7 +10,7 @@ def generate_ref():
     return f"{uuid_part}{code}"
 
 def discount_val(valeur,percent):
-    newPrice = valeur * (Decimal('1') - Decimal(str(percent)) / Decimal('100') )
+    newPrice = Decimal(valeur) * (Decimal('1') - Decimal(str(percent)) / Decimal('100') )
     return newPrice
 
 def _generate_sku(product,size,color):

@@ -17,6 +17,7 @@
   ]
   const activeTab = ref(0);
   const orders = ref([]);
+  const orderItems = ref([])
 
   onMounted(()=>{
     document.title = 'Account | Arthur';
@@ -44,6 +45,11 @@
     await axios.get('/api/v1/orders/')
       .then(response=>{
         orders.value = response.data
+        orders.value.forEach(order => {
+          console.log(order)
+        })
+        //orderItems.value.push()
+
       })
       .catch(err=>{
         console.log(err)
@@ -84,24 +90,10 @@
               <tbody>
 
                 <tr v-for="order in orders" :key="order.id">
-                  <td>#1357</td>
-                  <td>22 mars 2026</td>
+                  <td>{{ order.ref }}</td>
+                  <td>{{  }}</td>
                   <td>En attente</td>
-                  <td>300.00 €</td>
-                  <td><a href="#" class="view__order">Aperçu</a></td>
-                </tr>
-                <tr>
-                  <td>#13258</td>
-                  <td>21 février 2026</td>
-                  <td>Validé</td>
-                  <td>300.00 €</td>
-                  <td><a href="#" class="view__order">Aperçu</a></td>
-                </tr>
-                <tr>
-                  <td>#13258</td>
-                  <td>21 février 2026</td>
-                  <td>Completé</td>
-                  <td>150.00 €</td>
+                  <td>{{ order.paid_amount }} €</td>
                   <td><a href="#" class="view__order">Aperçu</a></td>
                 </tr>
                 </tbody>
@@ -131,7 +123,7 @@
           <h3 class="tab__header">Adresse de livraison</h3>
           <div class="tab__body">
             <address class="adress">
-              33 Villa de porte, <br>Jouy-le-moutier 95280,<br>France
+              33 Villa de porte, <br>Brazzaville,<br>France
             </address>
             <p class="city">Jouy-le-moutier</p>
             <a href="#" class="edit">Modifier</a>
